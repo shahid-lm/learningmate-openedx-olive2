@@ -961,3 +961,10 @@ def change_email_settings(request):
         )
 
     return JsonResponse({"success": True})
+
+@api_view(['POST'])
+def my_demo_api(request):
+    '''
+    This is a demo tag for testing
+    '''
+    return JsonResponse({"data" : "Hello World"})

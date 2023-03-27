@@ -18,6 +18,7 @@ urlpatterns = [
     path('accounts/manage_user_standing', views.manage_user_standing, name='manage_user_standing'),
 
     path('api/change_email_settings', views.change_email_settings, name='change_email_settings'),
+    path('api/my_demo_api', views.my_demo_api, name='my_demo_api'),
 
     re_path(fr'^course_run/{settings.COURSE_ID_PATTERN}/refund_status$',
             views.course_run_refund_status,
