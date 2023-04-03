@@ -18,6 +18,7 @@ from .transcript_settings import *
 from .transcripts_ajax import *
 from .user import *
 from .videos import *
+from .analytics import *
 
 try:
     from .dev import *
