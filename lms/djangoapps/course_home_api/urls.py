@@ -11,7 +11,7 @@ from lms.djangoapps.course_home_api.dates.views import DatesTabView
 from lms.djangoapps.course_home_api.outline.views import (
     OutlineTabView, dismiss_welcome_message, save_course_goal, unsubscribe_from_course_goal_by_token,
 )
-from lms.djangoapps.course_home_api.progress.views import ProgressTabView
+from lms.djangoapps.course_home_api.progress.views import ProgressTabView,AllEnrollmentProgressView
 
 # This API is a BFF ("backend for frontend") designed for the learning MFE. It's not versioned because there is no
 # guarantee of stability over time. It may change from one open edx release to another. Don't write any scripts
@@ -72,5 +72,10 @@ urlpatterns += [
         fr'progress/{settings.COURSE_KEY_PATTERN}',
         ProgressTabView.as_view(),
         name='progress-tab'
+    ),
+    re_path(
+        fr'progress/all_course',
+        AllEnrollmentProgressView.as_view(),
+        name='progress-tab-allenrollment'
     ),
 ]
