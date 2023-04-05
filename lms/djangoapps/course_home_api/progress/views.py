@@ -274,6 +274,8 @@ class ProgressTabView(RetrieveAPIView):
     
 class AllEnrollmentProgressView(RetrieveAPIView):
     
+    serializer_class = ProgressTabSerializer
+    
     def _get_student_user(self, request, course_key, student_id, is_staff):
         """Gets the student User object, either from coaching, masquerading, or normal actual request"""
         if student_id:
