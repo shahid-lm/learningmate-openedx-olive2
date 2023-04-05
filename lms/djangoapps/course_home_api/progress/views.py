@@ -309,107 +309,110 @@ class AllEnrollmentProgressView(RetrieveAPIView):
             raise Http404 from exc
     
     def get(self, request, *args, **kwargs):
-        all_course_progress_metadata = []
-        username = request.user.username
-        # json serializable
-        # all enrolled courses for the logged in user
-        all_courses_enrolled = get_course_enrollments(username=username,
-                                                  include_inactive=False)
-        for enrolled_course in all_courses_enrolled:
-            course_key_string = enrolled_course["course_id"]
-            course_key = CourseKey.from_string(course_key_string)
-            student_id = request.user.id
+        try:
+            all_course_progress_metadata = []
+            username = request.user.username
+            # json serializable
+            # all enrolled courses for the logged in user
+            all_courses_enrolled = get_course_enrollments(username=username,
+                                                    include_inactive=False)
+            for enrolled_course in all_courses_enrolled:
+                course_key_string = enrolled_course["course_details"]["course_id"]
+                course_key = CourseKey.from_string(course_key_string)
+                student_id = request.user.id
 
-            if not course_home_mfe_progress_tab_is_active(course_key):
-                raise Http404
+                if not course_home_mfe_progress_tab_is_active(course_key):
+                    raise Http404
 
-            # Enable NR tracing for this view based on course
-            monitoring_utils.set_custom_attribute('course_id', course_key_string)
-            monitoring_utils.set_custom_attribute('user_id', request.user.id)
-            monitoring_utils.set_custom_attribute('is_staff', request.user.is_staff)
-            is_staff = bool(has_access(request.user, 'staff', course_key))
+                # Enable NR tracing for this view based on course
+                monitoring_utils.set_custom_attribute('course_id', course_key_string)
+                monitoring_utils.set_custom_attribute('user_id', request.user.id)
+                monitoring_utils.set_custom_attribute('is_staff', request.user.is_staff)
+                is_staff = bool(has_access(request.user, 'staff', course_key))
 
-            student = self._get_student_user(request, course_key, student_id, is_staff)
-            username = get_enterprise_learner_generic_name(request) or student.username
+                student = self._get_student_user(request, course_key, student_id, is_staff)
+                username = get_enterprise_learner_generic_name(request) or student.username
 
-            course = get_course_with_access(student, 'load', course_key, check_if_enrolled=False)
+                course = get_course_with_access(student, 'load', course_key, check_if_enrolled=False)
 
-            course_overview = CourseOverview.get_from_id(course_key)
-            enrollment = CourseEnrollment.get_enrollment(student, course_key)
-            enrollment_mode = getattr(enrollment, 'mode', None)
+                course_overview = CourseOverview.get_from_id(course_key)
+                enrollment = CourseEnrollment.get_enrollment(student, course_key)
+                enrollment_mode = getattr(enrollment, 'mode', None)
 
-            if not (enrollment and enrollment.is_active) and not is_staff:
-                return Response('User not enrolled.', status=401)
+                if not (enrollment and enrollment.is_active) and not is_staff:
+                    return Response('User not enrolled.', status=401)
 
-            # The block structure is used for both the course_grade and has_scheduled content fields
-            # So it is called upfront and reused for optimization purposes
-            collected_block_structure = get_block_structure_manager(course_key).get_collected()
-            course_grade = CourseGradeFactory().read(student, collected_block_structure=collected_block_structure)
+                # The block structure is used for both the course_grade and has_scheduled content fields
+                # So it is called upfront and reused for optimization purposes
+                collected_block_structure = get_block_structure_manager(course_key).get_collected()
+                course_grade = CourseGradeFactory().read(student, collected_block_structure=collected_block_structure)
 
-            # recalculate course grade from visible grades (stored grade was calculated over all grades, visible or not)
-            course_grade.update(visible_grades_only=True, has_staff_access=is_staff)
+                # recalculate course grade from visible grades (stored grade was calculated over all grades, visible or not)
+                course_grade.update(visible_grades_only=True, has_staff_access=is_staff)
 
-            # Get has_scheduled_content data
-            transformers = BlockStructureTransformers()
-            transformers += [start_date.StartDateTransformer(), ContentTypeGateTransformer()]
-            usage_key = collected_block_structure.root_block_usage_key
-            course_blocks = get_course_blocks(
-                student,
-                usage_key,
-                transformers=transformers,
-                collected_block_structure=collected_block_structure,
-                include_has_scheduled_content=True
-            )
-            has_scheduled_content = course_blocks.get_xblock_field(usage_key, 'has_scheduled_content')
+                # Get has_scheduled_content data
+                transformers = BlockStructureTransformers()
+                transformers += [start_date.StartDateTransformer(), ContentTypeGateTransformer()]
+                usage_key = collected_block_structure.root_block_usage_key
+                course_blocks = get_course_blocks(
+                    student,
+                    usage_key,
+                    transformers=transformers,
+                    collected_block_structure=collected_block_structure,
+                    include_has_scheduled_content=True
+                )
+                has_scheduled_content = course_blocks.get_xblock_field(usage_key, 'has_scheduled_content')
 
-            # Get user_has_passing_grade data
-            user_has_passing_grade = False
-            if not student.is_anonymous:
-                user_grade = course_grade.percent
-                user_has_passing_grade = user_grade >= course.lowest_passing_grade
+                # Get user_has_passing_grade data
+                user_has_passing_grade = False
+                if not student.is_anonymous:
+                    user_grade = course_grade.percent
+                    user_has_passing_grade = user_grade >= course.lowest_passing_grade
 
-            descriptor = modulestore().get_course(course_key)
-            grading_policy = descriptor.grading_policy
-            verification_status = IDVerificationService.user_status(student)
-            verification_link = None
-            if verification_status['status'] is None or verification_status['status'] == 'expired':
-                verification_link = IDVerificationService.get_verify_location(course_id=course_key)
-            elif verification_status['status'] == 'must_reverify':
-                verification_link = IDVerificationService.get_verify_location(course_id=course_key)
-            verification_data = {
-                'link': verification_link,
-                'status': verification_status['status'],
-                'status_date': verification_status['status_date'],
-            }
+                descriptor = modulestore().get_course(course_key)
+                grading_policy = descriptor.grading_policy
+                verification_status = IDVerificationService.user_status(student)
+                verification_link = None
+                if verification_status['status'] is None or verification_status['status'] == 'expired':
+                    verification_link = IDVerificationService.get_verify_location(course_id=course_key)
+                elif verification_status['status'] == 'must_reverify':
+                    verification_link = IDVerificationService.get_verify_location(course_id=course_key)
+                verification_data = {
+                    'link': verification_link,
+                    'status': verification_status['status'],
+                    'status_date': verification_status['status_date'],
+                }
 
-            access_expiration = get_access_expiration_data(request.user, course_overview)
+                access_expiration = get_access_expiration_data(request.user, course_overview)
 
-            data = {
-                'access_expiration': access_expiration,
-                'certificate_data': get_cert_data(student, course, enrollment_mode, course_grade),
-                'completion_summary': get_course_blocks_completion_summary(course_key, student),
-                'course_grade': course_grade,
-                'credit_course_requirements': credit_course_requirements(course_key, student),
-                'end': course.end,
-                'enrollment_mode': enrollment_mode,
-                'grading_policy': grading_policy,
-                'has_scheduled_content': has_scheduled_content,
-                'section_scores': list(course_grade.chapter_grades.values()),
-                'studio_url': get_studio_url(course, 'settings/grading'),
-                'username': username,
-                'user_has_passing_grade': user_has_passing_grade,
-                'verification_data': verification_data,
-            }
-            context = self.get_serializer_context()
-            context['staff_access'] = is_staff
-            context['course_blocks'] = course_blocks
-            context['course_key'] = course_key
-            # course_overview and enrollment will be used by VerifiedModeSerializer
-            context['course_overview'] = course_overview
-            context['enrollment'] = enrollment
-            serializer = self.get_serializer_class()(data, context=context)
-            all_course_progress_metadata.append(serializer.data)
+                data = {
+                    'access_expiration': access_expiration,
+                    'certificate_data': get_cert_data(student, course, enrollment_mode, course_grade),
+                    'completion_summary': get_course_blocks_completion_summary(course_key, student),
+                    'course_grade': course_grade,
+                    'credit_course_requirements': credit_course_requirements(course_key, student),
+                    'end': course.end,
+                    'enrollment_mode': enrollment_mode,
+                    'grading_policy': grading_policy,
+                    'has_scheduled_content': has_scheduled_content,
+                    'section_scores': list(course_grade.chapter_grades.values()),
+                    'studio_url': get_studio_url(course, 'settings/grading'),
+                    'username': username,
+                    'user_has_passing_grade': user_has_passing_grade,
+                    'verification_data': verification_data,
+                }
+                context = self.get_serializer_context()
+                context['staff_access'] = is_staff
+                context['course_blocks'] = course_blocks
+                context['course_key'] = course_key
+                # course_overview and enrollment will be used by VerifiedModeSerializer
+                context['course_overview'] = course_overview
+                context['enrollment'] = enrollment
+                serializer = self.get_serializer_class()(data, context=context)
+                all_course_progress_metadata.append(serializer.data)
 
-        return Response({"all_enrolled_course_metadata" : all_course_progress_metadata})
+            return Response({"all_enrolled_course_metadata" : all_course_progress_metadata})
+        except Exception as e:
+            return Response({"error" : str(e)})
             
             
