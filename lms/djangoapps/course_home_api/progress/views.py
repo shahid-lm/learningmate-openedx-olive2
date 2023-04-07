@@ -272,7 +272,14 @@ class ProgressTabView(RetrieveAPIView):
 
         return Response(serializer.data)
     
-class AllEnrollmentProgressView(RetrieveAPIView):
+class DashboardStatisticsView(RetrieveAPIView):
+    
+    authentication_classes = (
+        JwtAuthentication,
+        BearerAuthenticationAllowInactiveUser,
+        #SessionAuthenticationAllowInactiveUser,
+    )
+    permission_classes = (IsAuthenticated,)
     
     serializer_class = ProgressTabSerializer
     
