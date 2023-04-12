@@ -275,7 +275,7 @@ class ProgressTabView(RetrieveAPIView):
 class DashboardStatisticsView(RetrieveAPIView):
     
     authentication_classes = (
-        JwtAuthentication,
+        # JwtAuthentication,
         BearerAuthenticationAllowInactiveUser,
         #SessionAuthenticationAllowInactiveUser,
     )
@@ -327,6 +327,7 @@ class DashboardStatisticsView(RetrieveAPIView):
                                                     include_inactive=False)
             for enrolled_course in all_courses_enrolled:
                 course_key_string = enrolled_course["course_details"]["course_id"]
+                course_name = enrolled_course["course_details"]["course_name"]
                 course_key = CourseKey.from_string(course_key_string)
                 student_id = request.user.id
 
@@ -395,6 +396,7 @@ class DashboardStatisticsView(RetrieveAPIView):
                 access_expiration = get_access_expiration_data(request.user, course_overview)
 
                 data = {
+                    'course_name' : course_name,
                     'access_expiration': access_expiration,
                     'certificate_data': get_cert_data(student, course, enrollment_mode, course_grade),
                     'completion_summary': get_course_blocks_completion_summary(course_key, student),
