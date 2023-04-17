@@ -4,7 +4,7 @@ Instructor API endpoint urls.
 
 from django.urls import path, re_path
 
-from lms.djangoapps.instructor.views import api, gradebook_api
+from lms.djangoapps.instructor.views import api, gradebook_api,instructor_dashboard
 from openedx.core.constants import COURSE_ID_PATTERN
 
 # These endpoints are exposing existing views in a way that can be used by MFEs
@@ -17,6 +17,7 @@ v1_api_urls = [
     re_path(rf'^reports/{COURSE_ID_PATTERN}$', api.ReportDownloads.as_view(), name='list_report_downloads', ),
     re_path(rf'^reports/{COURSE_ID_PATTERN}/generate/problem_responses$', api.ProblemResponseReportInitiate.as_view(),
             name='generate_problem_responses', ),
+    path('instructor_dashboard_data/', instructor_dashboard.DashboardStatisticsView.as_view(), name='instructor_dashboard_customized')
 ]
 
 urlpatterns = [
@@ -88,4 +89,5 @@ urlpatterns = [
     path('generate_bulk_certificate_exceptions', api.generate_bulk_certificate_exceptions,
          name='generate_bulk_certificate_exceptions'),
     path('certificate_invalidation_view/', api.certificate_invalidation_view, name='certificate_invalidation_view'),
+
 ]
