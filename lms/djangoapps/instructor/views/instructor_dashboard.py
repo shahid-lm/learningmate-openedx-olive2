@@ -957,7 +957,7 @@ class DashboardStatisticsView(RetrieveAPIView):
 
         instructor_data = {}
         try:
-            for course_id in CourseAccessRole.objects.filter(user_id=request.user.id).value_list("course_id").distinct():
+            for course_id in CourseAccessRole.objects.filter(user_id=request.user.id).values_list("course_id").distinct():
                 course_info = instructor_dashboard_data(request, course_id)
                 instructor_data[course_id] = course_info
                 return Response({"instructor_dashboard_data": instructor_data})
