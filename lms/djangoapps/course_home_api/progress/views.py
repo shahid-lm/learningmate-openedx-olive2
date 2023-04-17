@@ -272,7 +272,7 @@ class ProgressTabView(RetrieveAPIView):
 
         return Response(serializer.data)
     
-class DashboardStatisticsView(RetrieveAPIView):
+class LearnerDashboardStatisticsView(RetrieveAPIView):
     
     authentication_classes = (
         # JwtAuthentication,
@@ -396,7 +396,6 @@ class DashboardStatisticsView(RetrieveAPIView):
                 access_expiration = get_access_expiration_data(request.user, course_overview)
 
                 data = {
-                    'course_name' : course_name,
                     'access_expiration': access_expiration,
                     'certificate_data': get_cert_data(student, course, enrollment_mode, course_grade),
                     'completion_summary': get_course_blocks_completion_summary(course_key, student),
@@ -420,7 +419,9 @@ class DashboardStatisticsView(RetrieveAPIView):
                 context['course_overview'] = course_overview
                 context['enrollment'] = enrollment
                 serializer = self.get_serializer_class()(data, context=context)
-                all_course_progress_metadata.append(serializer.data)
+                serialized_data = serializer.data
+                serialized_data.update({'course_name' : course_name})
+                all_course_progress_metadata.append(serialized_data.data)
 
             return Response({"all_enrolled_course_metadata" : all_course_progress_metadata})
         except Exception as e:
