@@ -410,6 +410,7 @@ class LearnerDashboardStatisticsView(RetrieveAPIView):
                     'username': username,
                     'user_has_passing_grade': user_has_passing_grade,
                     'verification_data': verification_data,
+                    'course_name' : course_name
                 }
                 context = self.get_serializer_context()
                 context['staff_access'] = is_staff
@@ -419,9 +420,10 @@ class LearnerDashboardStatisticsView(RetrieveAPIView):
                 context['course_overview'] = course_overview
                 context['enrollment'] = enrollment
                 serializer = self.get_serializer_class()(data, context=context)
-                serialized_data = serializer.data
-                serialized_data.update({'course_name' : course_name})
-                all_course_progress_metadata.append(serialized_data.data)
+                log.info(f'####################### {type(serializer.data)} data: {serializer.data}')
+                # serialized_data = serializer.data
+                # serialized_data.update({'course_name' : course_name})
+                all_course_progress_metadata.append(serializer.data)
 
             return Response({"all_enrolled_course_metadata" : all_course_progress_metadata})
         except Exception as e:

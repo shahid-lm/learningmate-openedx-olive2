@@ -815,7 +815,7 @@ def instructor_dashboard_data(request, course_id):  # lint-amnesty, pylint: disa
     sections = []
     if access['staff']:
         sections_content = [
-            _section_course_info(course, access),
+           # _section_course_info(course, access),
             _section_membership(course, access),
             _section_cohort_management(course, access),
             _section_student_admin(course, access),
@@ -829,20 +829,20 @@ def instructor_dashboard_data(request, course_id):  # lint-amnesty, pylint: disa
         sections.append(_section_data_download(course, access))
 
     analytics_dashboard_message = None
-    if show_analytics_dashboard_message(course_key) and (access['staff'] or access['instructor']):
-        # Construct a URL to the external analytics dashboard
-        analytics_dashboard_url = f'{settings.ANALYTICS_DASHBOARD_URL}/courses/{str(course_key)}'
-        link_start = HTML("<a href=\"{}\" rel=\"noopener\" target=\"_blank\">").format(analytics_dashboard_url)
-        analytics_dashboard_message = _(
-            "To gain insights into student enrollment and participation {link_start}"
-            "visit {analytics_dashboard_name}, our new course analytics product{link_end}."
-        )
-        analytics_dashboard_message = Text(analytics_dashboard_message).format(
-            link_start=link_start, link_end=HTML("</a>"),
-            analytics_dashboard_name=settings.ANALYTICS_DASHBOARD_NAME)
-
-        # Temporarily show the "Analytics" section until we have a better way of linking to Insights
-        sections.append(_section_analytics(course, access))
+    # if show_analytics_dashboard_message(course_key) and (access['staff'] or access['instructor']):
+    #     # Construct a URL to the external analytics dashboard
+    #     analytics_dashboard_url = f'{settings.ANALYTICS_DASHBOARD_URL}/courses/{str(course_key)}'
+    #     link_start = HTML("<a href=\"{}\" rel=\"noopener\" target=\"_blank\">").format(analytics_dashboard_url)
+    #     analytics_dashboard_message = _(
+    #         "To gain insights into student enrollment and participation {link_start}"
+    #         "visit {analytics_dashboard_name}, our new course analytics product{link_end}."
+    #     )
+    #     analytics_dashboard_message = Text(analytics_dashboard_message).format(
+    #         link_start=link_start, link_end=HTML("</a>"),
+    #         analytics_dashboard_name=settings.ANALYTICS_DASHBOARD_NAME)
+    #
+    #     # Temporarily show the "Analytics" section until we have a better way of linking to Insights
+    #     sections.append(_section_analytics(course, access))
 
     # Check if there is corresponding entry in the CourseMode Table related to the Instructor Dashboard course
     course_mode_has_price = False  # lint-amnesty, pylint: disable=unused-variable
@@ -926,7 +926,7 @@ def instructor_dashboard_data(request, course_id):  # lint-amnesty, pylint: disa
         'course': course,
         'studio_url': get_studio_url(course, 'course'),
         'sections': sections,
-        'analytics_dashboard_message': analytics_dashboard_message,
+        #'analytics_dashboard_message': analytics_dashboard_message,
         'certificate_allowlist': certificate_allowlist,
         'certificate_invalidations': certificate_invalidations
     }
@@ -958,6 +958,7 @@ class DashboardStatisticsView(RetrieveAPIView):
         instructor_data = {}
         try:
             for course_id in list(CourseAccessRole.objects.filter(user_id=request.user.id).distinct().values_list("course_id", flat=True)):
+                log.info(f'################ {course_id}')
                 course_info = instructor_dashboard_data(request, course_id)
                 instructor_data[course_id] = course_info
                 return Response({"instructor_dashboard_data": instructor_data})
