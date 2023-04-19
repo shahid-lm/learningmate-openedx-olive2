@@ -119,7 +119,9 @@ def show_analytics_dashboard_message(course_key):
 def instructor_dashboard_2(request, course_id):  # lint-amnesty, pylint: disable=too-many-statements
     """ Display the instructor dashboard for a course. """
     try:
+        log.warning(f'############################# course_id {course_id} -- course_id_type {type(course_id)}')
         course_key = CourseKey.from_string(course_id)
+        log.warning(f'############################# course_key {course_key} -- course_key_type {type(course_key)}')
     except InvalidKeyError:
         log.error("Unable to find course with course key %s while loading the Instructor Dashboard.", course_id)
         return HttpResponseServerError()
@@ -798,6 +800,9 @@ def is_ecommerce_course(course_key):
 def instructor_dashboard_data(request, course_id):  # lint-amnesty, pylint: disable=too-many-statements
     """ Display the instructor dashboard for a course. """
     try:
+        course_id_type_f1 = type(course_id)
+        log.warning(f'############################# course_id{course_id}')
+        log.warning(f'############################# course_id_type_f1 {course_id_type_f1}')
         log.warning(f'############################# request.user.is_staff {request.user.is_staff}')
         course_key = CourseKey.from_string(course_id)
         log.warning(f'############################# course_key {course_key}')
@@ -979,7 +984,9 @@ class DashboardStatisticsView(RetrieveAPIView):
         try:
             for course_id in list(CourseAccessRole.objects.filter(user_id=request.user.id).distinct().values_list("course_id", flat=True)):
                 log.info(f'################ {course_id}')
-                course_info = instructor_dashboard_data(request, course_id)
+                course_id_type = type(course_id)
+                log.warning(f'############################# course_id_type {course_id_type}')
+                course_info = instructor_dashboard_data(request=request, course_id=course_id)
                 instructor_data[course_id] = course_info
                 return Response({"instructor_dashboard_data": instructor_data})
         except Exception as e:
