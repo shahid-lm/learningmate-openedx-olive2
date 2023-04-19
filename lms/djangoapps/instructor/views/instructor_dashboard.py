@@ -792,6 +792,7 @@ def is_ecommerce_course(course_key):
 def instructor_dashboard_data(request, course_id):  # lint-amnesty, pylint: disable=too-many-statements
     """ Display the instructor dashboard for a course. """
     try:
+        log.warning(f'############################# request.user.is_staff {request.user.is_staff}')
         course_key = CourseKey.from_string(course_id)
     except InvalidKeyError:
         log.error("Unable to find course with course key %s while loading the Instructor Dashboard.", course_id)
@@ -809,18 +810,20 @@ def instructor_dashboard_data(request, course_id):  # lint-amnesty, pylint: disa
         'data_researcher': request.user.has_perm(permissions.CAN_RESEARCH, course_key),
     }
 
-    if not request.user.has_perm(permissions.VIEW_DASHBOARD, course_key):
-        raise Http404()
+    # if not request.user.has_perm(permissions.VIEW_DASHBOARD, course_key):
+    #     raise Http404()
 
     sections = []
     if access['staff']:
         sections_content = [
-           # _section_course_info(course, access),
+           _section_course_info(course, access),
             _section_membership(course, access),
             _section_cohort_management(course, access),
             _section_student_admin(course, access),
         ]
-
+        
+        log.warning(f'######################### {sections_content}')
+        
         if legacy_discussion_experience_enabled(course_key):
             sections_content.append(_section_discussions_management(course, access))
         sections.extend(sections_content)
@@ -938,8 +941,9 @@ def instructor_dashboard_data(request, course_id):  # lint-amnesty, pylint: disa
     # )
 
     # context.update(context_from_plugins)
+    log.warning(f'############################# {context}')
 
-    return Response({"instructor_dashboard_data": context})
+    return context
 
 
 
