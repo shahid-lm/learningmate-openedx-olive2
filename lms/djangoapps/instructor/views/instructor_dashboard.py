@@ -436,7 +436,6 @@ def _section_course_info(course, access):
         'num_sections': len(course.children),
         #'list_instructor_tasks_url': reverse('list_instructor_tasks', kwargs={'course_id': str(course_key)}),
     }
-    log.info(f'################ section course info {section_data}')
 
     if settings.FEATURES.get('DISPLAY_ANALYTICS_ENROLLMENTS'):
         section_data['enrollment_count'] = CourseEnrollment.objects.enrollment_counts(course_key)
@@ -445,7 +444,6 @@ def _section_course_info(course, access):
     if show_analytics_dashboard_message(course_key):
         #  dashboard_link is already made safe in _get_dashboard_link
         dashboard_link = _get_dashboard_link(course_key)
-        log.info(f'################ dashboard_link {dashboard_link}')
         #  so we can use Text() here so it's not double-escaped and rendering HTML on the front-end
         message = Text(
             _("Enrollment data is now available in {dashboard_link}.")
@@ -454,17 +452,14 @@ def _section_course_info(course, access):
 
     try:
         sorted_cutoffs = sorted(list(course.grade_cutoffs.items()), key=lambda i: i[1], reverse=True)
-        log.info(f'################ sorted_cutoffs {sorted_cutoffs}')
         advance = lambda memo, letter_score_tuple: f"{letter_score_tuple[0]}: {letter_score_tuple[1]}, " \
                                                    + memo
         section_data['grade_cutoffs'] = reduce(advance, sorted_cutoffs, "")[:-2]
-        log.info(f'################ section_data 459 {section_data}')
     except Exception:  # pylint: disable=broad-except
         section_data['grade_cutoffs'] = "Not Available"
 
     try:
         section_data['course_errors'] = [(escape(a), '') for (a, _unused) in modulestore().get_course_errors(course.id)]
-        log.info(f'################ section_data 465 {section_data}')
     except Exception:  # pylint: disable=broad-except
         section_data['course_errors'] = [('Error fetching errors', '')]
 
@@ -800,18 +795,11 @@ def is_ecommerce_course(course_key):
 def instructor_dashboard_data(request, course_id):  # lint-amnesty, pylint: disable=too-many-statements
     """ Display the instructor dashboard for a course. """
     try:
-        course_id_type_f1 = type(course_id)
-        log.warning(f'############################# course_id{course_id}')
-        log.warning(f'############################# course_id_type_f1 {course_id_type_f1}')
-        log.warning(f'############################# request.user.is_staff {request.user.is_staff}')
         course_key = CourseKey.from_string(course_id)
-        log.warning(f'############################# course_key {course_key}')
     except InvalidKeyError:
         log.error("Unable to find course with course key %s while loading the Instructor Dashboard.", course_id)
-        # return HttpResponseServerError()
 
     course = get_course_by_id(course_key, depth=None)
-    log.warning(f'############################# course {course}')
 
     access = {
         'admin': request.user.is_staff,
@@ -822,63 +810,25 @@ def instructor_dashboard_data(request, course_id):  # lint-amnesty, pylint: disa
         'forum_admin': has_forum_access(request.user, course_key, FORUM_ROLE_ADMINISTRATOR),
         'data_researcher': request.user.has_perm(permissions.CAN_RESEARCH, course_key),
     }
-    log.warning(f'############################# access {access}')
-    # if not request.user.has_perm(permissions.VIEW_DASHBOARD, course_key):
-    #     raise Http404()
-
     sections = []
     if access['staff']:
         sec_info = _section_course_info(course, access)
-        log.warning(f'############################# access {access}')
         sec_mem = _section_membership(course, access)
-        log.warning(f'############################# sec_mem {sec_mem}')
         sec_mgt = _section_cohort_management(course, access)
-        log.warning(f'############################# sec_mgt {sec_mgt}')
         sec_stu = _section_student_admin(course, access)
-        log.warning(f'############################# sec_mem {sec_stu}')
         sections_content = [
            _section_course_info(course, access),
-            _section_membership(course, access),
-            _section_cohort_management(course, access),
-            _section_student_admin(course, access),
+            #_section_membership(course, access),
+            #_section_cohort_management(course, access),
+            #_section_student_admin(course, access),
         ]
 
-        log.warning(f'######################### {sections_content}')
-
-        if legacy_discussion_experience_enabled(course_key):
-            sections_content.append(_section_discussions_management(course, access))
+        # if legacy_discussion_experience_enabled(course_key):
+        #     sections_content.append(_section_discussions_management(course, access))
         sections.extend(sections_content)
 
     if access['data_researcher']:
         sections.append(_section_data_download(course, access))
-
-    analytics_dashboard_message = None
-    # if show_analytics_dashboard_message(course_key) and (access['staff'] or access['instructor']):
-    #     # Construct a URL to the external analytics dashboard
-    #     analytics_dashboard_url = f'{settings.ANALYTICS_DASHBOARD_URL}/courses/{str(course_key)}'
-    #     link_start = HTML("<a href=\"{}\" rel=\"noopener\" target=\"_blank\">").format(analytics_dashboard_url)
-    #     analytics_dashboard_message = _(
-    #         "To gain insights into student enrollment and participation {link_start}"
-    #         "visit {analytics_dashboard_name}, our new course analytics product{link_end}."
-    #     )
-    #     analytics_dashboard_message = Text(analytics_dashboard_message).format(
-    #         link_start=link_start, link_end=HTML("</a>"),
-    #         analytics_dashboard_name=settings.ANALYTICS_DASHBOARD_NAME)
-    #
-    #     # Temporarily show the "Analytics" section until we have a better way of linking to Insights
-    #     sections.append(_section_analytics(course, access))
-
-    # Check if there is corresponding entry in the CourseMode Table related to the Instructor Dashboard course
-    course_mode_has_price = False  # lint-amnesty, pylint: disable=unused-variable
-    paid_modes = CourseMode.paid_modes_for_course(course_key)
-    if len(paid_modes) == 1:
-        course_mode_has_price = True
-    elif len(paid_modes) > 1:
-        log.error(
-            "Course %s has %s course modes with payment options. Course must only have "
-            "one paid course mode to enable eCommerce options.",
-            str(course_key), len(paid_modes)
-        )
 
     if access['instructor'] and is_enabled_for_course(course_key):
         sections.insert(3, _section_extensions(course))
@@ -950,18 +900,10 @@ def instructor_dashboard_data(request, course_id):  # lint-amnesty, pylint: disa
         'course': course,
         'studio_url': get_studio_url(course, 'course'),
         'sections': sections,
-        #'analytics_dashboard_message': analytics_dashboard_message,
         'certificate_allowlist': certificate_allowlist,
         'certificate_invalidations': certificate_invalidations
     }
-
-    # context_from_plugins = get_plugins_view_context(
-    #     ProjectType.LMS,
-    #     INSTRUCTOR_DASHBOARD_PLUGIN_VIEW_NAME,
-    #     context
-    # )
-
-    # context.update(context_from_plugins)
+    
     log.warning(f'############################# {context}')
 
     return context
@@ -985,9 +927,9 @@ class DashboardStatisticsView(RetrieveAPIView):
             all_course_ids = list(set(list(CourseAccessRole.objects.filter(user_id=request.user.id).values_list("course_id", flat=True))))
             for course_id in all_course_ids:
                 course_id_string = str(course_id)
-                log.info(f'################ course_id_string {course_id_string}')
+                log.info(f'################ course_id_string {type(course_id_string)} {type(course_id_string)}')
                 course_info = instructor_dashboard_data(request=request, course_id=course_id_string)
-                instructor_data[course_id] = course_info
+                instructor_data[course_id_string] = course_info
                 return Response({"instructor_dashboard_data": instructor_data})
         except Exception as e:
             return Response({"error": str(e)})
