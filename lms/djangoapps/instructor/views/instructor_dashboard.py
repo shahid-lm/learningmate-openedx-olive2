@@ -434,7 +434,7 @@ def _section_course_info(course, access):
         'start_date': course.start,
         'end_date': course.end,
         'num_sections': len(course.children),
-        #'list_instructor_tasks_url': reverse('list_instructor_tasks', kwargs={'course_id': str(course_key)}),
+        'list_instructor_tasks_url': reverse('list_instructor_tasks', kwargs={'course_id': str(course_key)}),
     }
 
     if settings.FEATURES.get('DISPLAY_ANALYTICS_ENROLLMENTS'):
