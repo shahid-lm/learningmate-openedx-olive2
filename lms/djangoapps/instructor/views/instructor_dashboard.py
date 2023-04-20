@@ -808,7 +808,7 @@ def instructor_dashboard_data(request, course_id):  # lint-amnesty, pylint: disa
         log.warning(f'############################# course_key {course_key}')
     except InvalidKeyError:
         log.error("Unable to find course with course key %s while loading the Instructor Dashboard.", course_id)
-        return HttpResponseServerError()
+        # return HttpResponseServerError()
 
     course = get_course_by_id(course_key, depth=None)
     log.warning(f'############################# course {course}')
@@ -982,11 +982,11 @@ class DashboardStatisticsView(RetrieveAPIView):
 
         instructor_data = {}
         try:
-            for course_id in list(CourseAccessRole.objects.filter(user_id=request.user.id).distinct().values_list("course_id", flat=True)):
-                log.info(f'################ {course_id}')
-                course_id_type = type(course_id)
-                log.warning(f'############################# course_id_type {course_id_type}')
-                course_info = instructor_dashboard_data(request=request, course_id=course_id)
+            all_course_ids = set(list(CourseAccessRole.objects.filter(user_id=request.user.id).values_list("course_id", flat=True)))
+            for course_id in all_course_ids:
+                course_id_string = str(course_id)
+                log.info(f'################ course_id_string {course_id_string}')
+                course_info = instructor_dashboard_data(request=request, course_id=course_id_string)
                 instructor_data[course_id] = course_info
                 return Response({"instructor_dashboard_data": instructor_data})
         except Exception as e:
