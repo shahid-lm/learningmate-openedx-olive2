@@ -982,7 +982,7 @@ class DashboardStatisticsView(RetrieveAPIView):
 
         instructor_data = {}
         try:
-            all_course_ids = set(list(CourseAccessRole.objects.filter(user_id=request.user.id).values_list("course_id", flat=True)))
+            all_course_ids = list(set(list(CourseAccessRole.objects.filter(user_id=request.user.id).values_list("course_id", flat=True))))
             for course_id in all_course_ids:
                 course_id_string = str(course_id)
                 log.info(f'################ course_id_string {course_id_string}')
