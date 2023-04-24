@@ -874,19 +874,19 @@ def instructor_dashboard_data(request, course_id):  # lint-amnesty, pylint: disa
         #     sections_content.append(_section_discussions_management(course, access))
         sections.extend(sections_content)
 
-    if access['data_researcher']:
-        sections.append(_section_data_download(course, access))
+    # if access['data_researcher']:
+    #     sections.append(_section_data_download(course, access))
 
-    if access['instructor'] and is_enabled_for_course(course_key):
-        sections.insert(3, _section_extensions(course))
+    # if access['instructor'] and is_enabled_for_course(course_key):
+    #     sections.insert(3, _section_extensions(course))
 
     # Gate access to course email by feature flag & by course-specific authorization
-    if (
-        is_bulk_email_feature_enabled(course_key) and not
-    is_bulk_email_disabled_for_course(course_key) and
-        (access['staff'] or access['instructor'])
-    ):
-        sections.append(_section_send_email(course, access))
+    # if (
+    #     is_bulk_email_feature_enabled(course_key) and not
+    # is_bulk_email_disabled_for_course(course_key) and
+    #     (access['staff'] or access['instructor'])
+    # ):
+    #     sections.append(_section_send_email(course, access))
 
     # Gate access to Special Exam tab depending if either timed exams or proctored exams
     # are enabled in the course
@@ -917,8 +917,8 @@ def instructor_dashboard_data(request, course_id):  # lint-amnesty, pylint: disa
     openassessment_blocks = [
         block for block in openassessment_blocks if block.parent is not None
     ]
-    if len(openassessment_blocks) > 0 and access['staff']:
-        sections.append(_section_open_response_assessment(request, course, openassessment_blocks, access))
+    # if len(openassessment_blocks) > 0 and access['staff']:
+    #     sections.append(_section_open_response_assessment(request, course, openassessment_blocks, access))
 
     disable_buttons = not CourseEnrollment.objects.is_small_course(course_key)
 
@@ -969,14 +969,14 @@ class DashboardStatisticsView(RetrieveAPIView):
 
     def get(self, request, *args, **kwarg):
 
-        instructor_data = {}
+        instructor_data = []
         try:
             all_course_ids = list(set(list(CourseAccessRole.objects.filter(user_id=request.user.id).values_list("course_id", flat=True))))
             for course_id in all_course_ids:
                 course_id_string = str(course_id)
                 log.info(f'################ course_id_string {type(course_id_string)} {type(course_id_string)}')
                 course_info = instructor_dashboard_data(request=request, course_id=course_id_string)
-                instructor_data[course_id_string] = course_info
+                instructor_data.append(course_info)
             return Response({"instructor_dashboard_data": instructor_data})
         except Exception as e:
             return Response({"error": str(e)})
