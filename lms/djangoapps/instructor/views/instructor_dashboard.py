@@ -794,6 +794,7 @@ def is_ecommerce_course(course_key):
 
 def instructor_dashboard_data(request, course_id):  # lint-amnesty, pylint: disable=too-many-statements
     """ Display the instructor dashboard for a course. """
+    course_key = ""
     try:
         course_key = CourseKey.from_string(course_id)
     except InvalidKeyError:
@@ -897,7 +898,7 @@ def instructor_dashboard_data(request, course_id):  # lint-amnesty, pylint: disa
     certificate_invalidations = CertificateInvalidation.get_certificate_invalidations(course_key)
 
     context = {
-        'course': course,
+        #'course': course,
         'studio_url': get_studio_url(course, 'course'),
         'sections': sections,
         'certificate_allowlist': certificate_allowlist,
@@ -930,6 +931,6 @@ class DashboardStatisticsView(RetrieveAPIView):
                 log.info(f'################ course_id_string {type(course_id_string)} {type(course_id_string)}')
                 course_info = instructor_dashboard_data(request=request, course_id=course_id_string)
                 instructor_data[course_id_string] = course_info
-                return Response({"instructor_dashboard_data": instructor_data})
+            return Response({"instructor_dashboard_data": instructor_data})
         except Exception as e:
             return Response({"error": str(e)})
