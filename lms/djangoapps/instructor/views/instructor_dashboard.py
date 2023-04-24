@@ -788,7 +788,53 @@ def is_ecommerce_course(course_key):
     sku_count = len([mode.sku for mode in CourseMode.modes_for_course(course_key) if mode.sku])
     return sku_count > 0
 
+def _section_course_info_dashboard(course, access):
+    """ Provide data for the corresponding dashboard section """
+    course_key = course.id
 
+    section_data = {
+        'section_key': 'course_info',
+        'section_display_name': _('Course Info'),
+        'access': access,
+        'course_id': str(course_key),
+        'course_display_name': course.display_name_with_default,
+        'course_org': course.display_org_with_default,
+        'course_number': course.display_number_with_default,
+        'has_started': course.has_started(),
+        'has_ended': course.has_ended(),
+        'start_date': course.start.strftime('%d-%m-%Y') if type(course.start) == datetime.datetime else None,
+        'end_date': course.end.strftime('%d-%m-%Y') if type(course.end) == datetime.datetime else None,
+        'num_sections': len(course.children),
+        'list_instructor_tasks_url': reverse('list_instructor_tasks', kwargs={'course_id': str(course_key)}),
+    }
+
+    if settings.FEATURES.get('DISPLAY_ANALYTICS_ENROLLMENTS'):
+        section_data['enrollment_count'] = dict(CourseEnrollment.objects.enrollment_counts(course_key))
+        log.info(f'################ section course info 441 {section_data}')
+
+    if show_analytics_dashboard_message(course_key):
+        #  dashboard_link is already made safe in _get_dashboard_link
+        dashboard_link = _get_dashboard_link(course_key)
+        #  so we can use Text() here so it's not double-escaped and rendering HTML on the front-end
+        message = Text(
+            _("Enrollment data is now available in {dashboard_link}.")
+        ).format(dashboard_link=dashboard_link)
+        section_data['enrollment_message'] = message
+
+    try:
+        sorted_cutoffs = sorted(list(course.grade_cutoffs.items()), key=lambda i: i[1], reverse=True)
+        advance = lambda memo, letter_score_tuple: f"{letter_score_tuple[0]}: {letter_score_tuple[1]}, " \
+                                                   + memo
+        section_data['grade_cutoffs'] = reduce(advance, sorted_cutoffs, "")[:-2]
+    except Exception:  # pylint: disable=broad-except
+        section_data['grade_cutoffs'] = "Not Available"
+
+    try:
+        section_data['course_errors'] = [(escape(a), '') for (a, _unused) in modulestore().get_course_errors(course.id)]
+    except Exception:  # pylint: disable=broad-except
+        section_data['course_errors'] = [('Error fetching errors', '')]
+
+    return section_data
 
 
 
@@ -813,12 +859,12 @@ def instructor_dashboard_data(request, course_id):  # lint-amnesty, pylint: disa
     }
     sections = []
     if access['staff']:
-        sec_info = _section_course_info(course, access)
+        sec_info = _section_course_info_dashboard(course, access)
         sec_mem = _section_membership(course, access)
         sec_mgt = _section_cohort_management(course, access)
         sec_stu = _section_student_admin(course, access)
         sections_content = [
-           _section_course_info(course, access),
+           _section_course_info_dashboard(course, access),
             #_section_membership(course, access),
             #_section_cohort_management(course, access),
             #_section_student_admin(course, access),
