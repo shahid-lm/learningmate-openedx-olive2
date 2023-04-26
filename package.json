@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "repository": "https://github.com/openedx/edx-platform",
   "dependencies": {
+    "highcharts": "^10.3.3",
     "@babel/core": "7.17.8",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
     "@babel/plugin-transform-object-assign": "^7.0.0",

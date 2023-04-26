@@ -18,6 +18,9 @@ from lms.djangoapps.program_enrollments.rest_api.v1.utils import ProgramSpecific
 from openedx.core.djangoapps.programs.models import ProgramsApiConfig
 from openedx.core.lib.api.authentication import BearerAuthentication
 
+from rest_framework.decorators import api_view
+from django.shortcuts import render
+
 
 @login_required
 @require_GET
@@ -191,3 +194,10 @@ class ProgramLiveIframeView(APIView, ProgramSpecificViewMixin):
             }
         }
         return Response(response_data, status=status.HTTP_200_OK)
+    
+@api_view(['GET'])
+def render_learner_dashboard(request):
+    try:
+        return render(request, 'learner-dashboard.html')
+    except Exception as e:
+        return Response({'failed' : {str(e)}})
