@@ -1270,7 +1270,7 @@ TEMPLATES = [
         # Instead, look for template source files in these dirs.
         'DIRS': [
             PROJECT_ROOT / "templates",
-            os.path.join(PROJECT_ROOT, 'learner-dashboard'),
+            os.path.join(PROJECT_ROOT, 'learner-dashboard-analytics'),
             COMMON_ROOT / 'templates',
             XMODULE_ROOT / 'capa' / 'templates',
             COMMON_ROOT / 'djangoapps' / 'pipeline_mako' / 'templates',
@@ -1793,7 +1793,7 @@ STATICFILES_DIRS = [
     COMMON_ROOT / "static",
     PROJECT_ROOT / "static",
     NODE_MODULES_ROOT / "@edx",
-    os.path.join(PROJECT_ROOT, "learner-dashboard/static")
+    os.path.join(PROJECT_ROOT, "learner-dashboard-analytics/static")
 ]
 
 FAVICON_PATH = 'images/favicon.ico'
