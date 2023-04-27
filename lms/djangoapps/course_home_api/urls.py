@@ -4,14 +4,15 @@ Contains all the URLs for the Course Home
 
 
 from django.conf import settings
-from django.urls import re_path
+from django.urls import re_path,path
 
 from lms.djangoapps.course_home_api.course_metadata.views import CourseHomeMetadataView
 from lms.djangoapps.course_home_api.dates.views import DatesTabView
 from lms.djangoapps.course_home_api.outline.views import (
     OutlineTabView, dismiss_welcome_message, save_course_goal, unsubscribe_from_course_goal_by_token,
 )
-from lms.djangoapps.course_home_api.progress.views import ProgressTabView,LearnerDashboardStatisticsView
+from lms.djangoapps.course_home_api.progress.views import (ProgressTabView,LearnerDashboardStatisticsView,
+                                                           LearnerDashboardReactView)
 
 # This API is a BFF ("backend for frontend") designed for the learning MFE. It's not versioned because there is no
 # guarantee of stability over time. It may change from one open edx release to another. Don't write any scripts
@@ -78,4 +79,5 @@ urlpatterns += [
         LearnerDashboardStatisticsView.as_view(),
         name='progress-tab-allenrollment'
     ),
+    path('learner_analytical_dashboard2', LearnerDashboardReactView.as_view(), name='learner_analytical_dashboard2')
 ]

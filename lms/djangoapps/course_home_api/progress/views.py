@@ -11,6 +11,8 @@ from opaque_keys.edx.keys import CourseKey
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from django.shortcuts import render
 
 from xmodule.modulestore.django import modulestore
 from common.djangoapps.student.models import CourseEnrollment
@@ -275,9 +277,9 @@ class ProgressTabView(RetrieveAPIView):
 class LearnerDashboardStatisticsView(RetrieveAPIView):
     
     authentication_classes = (
-        # JwtAuthentication,
+        JwtAuthentication,
         BearerAuthenticationAllowInactiveUser,
-        #SessionAuthenticationAllowInactiveUser,
+        SessionAuthenticationAllowInactiveUser,
     )
     permission_classes = (IsAuthenticated,)
     
@@ -428,5 +430,28 @@ class LearnerDashboardStatisticsView(RetrieveAPIView):
             return Response({"all_enrolled_course_metadata" : all_course_progress_metadata})
         except Exception as e:
             return Response({"error" : str(e)})
+        
+class LearnerDashboardReactView(APIView):
+    """
+    View for rendering learner analytical dashboard(custom).
+
+    * Requires authentications.
+    * Only authenticated users are able to access this view.
+    """
+    authentication_classes = (
+        JwtAuthentication,
+        BearerAuthenticationAllowInactiveUser,
+        SessionAuthenticationAllowInactiveUser,
+    )
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, format=None):
+        """
+        Renders index template inside React build.
+        """
+        try:
+            return render(request, 'learner-dashboard.html')
+        except Exception as e:
+            return Response({'failed' : {str(e)}})
             
             

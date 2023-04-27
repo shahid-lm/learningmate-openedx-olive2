@@ -194,7 +194,9 @@ class ProgramLiveIframeView(APIView, ProgramSpecificViewMixin):
             }
         }
         return Response(response_data, status=status.HTTP_200_OK)
-    
+
+@login_required
+@require_GET    
 @api_view(['GET'])
 def render_learner_dashboard(request):
     try:
