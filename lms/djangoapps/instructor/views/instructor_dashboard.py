@@ -33,6 +33,9 @@ from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import CourseKey
 from xblock.field_data import DictFieldData
 from xblock.fields import ScopeIds
+from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
+from edx_rest_framework_extensions.auth.session.authentication import SessionAuthenticationAllowInactiveUser
+
 
 from common.djangoapps.course_modes.models import CourseMode, CourseModesArchive
 from common.djangoapps.edxmako.shortcuts import render_to_response
@@ -959,9 +962,9 @@ def instructor_dashboard_data(request, course_id):  # lint-amnesty, pylint: disa
 
 
 class DashboardStatisticsView(RetrieveAPIView):
-    authentication_classes = (# JwtAuthentication,
+    authentication_classes = (JwtAuthentication,
         BearerAuthenticationAllowInactiveUser,
-        # #SessionAuthenticationAllowInactiveUser,
+        SessionAuthenticationAllowInactiveUser,
     )
     permission_classes = (IsAuthenticated,
      )
