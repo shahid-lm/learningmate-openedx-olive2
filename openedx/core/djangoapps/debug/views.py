@@ -21,10 +21,10 @@ def show_reference_template(request, template):
     reference templates.
 
     e.g. http://localhost:8000/template/ux/reference/index.html
-    shows the template from ux/reference/index.html
+    shows the template from ux/reference/instructor-dashboard.html
 
     Note: dynamic parameters can also be passed to the page.
-    e.g. /template/ux/reference/index.html?name=Foo
+    e.g. /template/ux/reference/instructor-dashboard.html?name=Foo
     """
     try:
         is_v1 = '/v1/' in request.path

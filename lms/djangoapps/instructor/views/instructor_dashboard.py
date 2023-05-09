@@ -80,6 +80,11 @@ from xmodule.tabs import CourseTab  # lint-amnesty, pylint: disable=wrong-import
 from .. import permissions
 from ..toggles import data_download_v2_is_enabled
 from .tools import get_units_with_due_date, title_or_url
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_GET
+from rest_framework.decorators import api_view
+from django.shortcuts import render
+
 
 log = logging.getLogger(__name__)
 
@@ -953,7 +958,7 @@ def instructor_dashboard_data(request, course_id):  # lint-amnesty, pylint: disa
         'certificate_allowlist': certificate_allowlist,
         'certificate_invalidations': certificate_invalidations
     }
-    
+
     log.warning(f'############################# {context}')
 
     return context
@@ -983,3 +988,15 @@ class DashboardStatisticsView(RetrieveAPIView):
             return Response({"instructor_dashboard_data": instructor_data})
         except Exception as e:
             return Response({"error": str(e)})
+
+
+
+
+@login_required
+@require_GET
+@api_view(['GET'])
+def render_instructor_dashboard(request):
+    try:
+        return render(request, 'instructor-dashboard.html')
+    except Exception as e:
+        return Response({'failed' : {str(e)}})

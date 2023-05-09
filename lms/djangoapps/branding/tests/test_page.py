@@ -256,7 +256,7 @@ class IndexPageCourseCardsSortingTests(ModuleStoreTestCase):
         response = self.client.get('/')
         assert response.status_code == 200
         ((template, context), _) = RENDER_MOCK.call_args  # pylint: disable=unpacking-non-sequence
-        assert template == 'index.html'
+        assert template == 'instructor-dashboard.html'
 
         # by default the courses will be sorted by their creation dates, earliest first.
         assert context['courses'][0].id == self.starting_earlier.id
@@ -282,7 +282,7 @@ class IndexPageCourseCardsSortingTests(ModuleStoreTestCase):
         response = self.client.get('/')
         assert response.status_code == 200
         ((template, context), _) = RENDER_MOCK.call_args  # pylint: disable=unpacking-non-sequence
-        assert template == 'index.html'
+        assert template == 'instructor-dashboard.html'
 
         # now the courses will be sorted by their announcement dates.
         assert context['courses'][0].id == self.starting_later.id
