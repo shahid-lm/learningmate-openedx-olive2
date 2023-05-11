@@ -44,6 +44,7 @@ log = logging.getLogger(__name__)
 COMPONENT_TYPES = ['discussion', 'library', 'html', 'openassessment', 'problem', 'video']
 
 ADVANCED_COMPONENT_TYPES = sorted({name for name, class_ in XBlock.load_classes()} - set(COMPONENT_TYPES))
+log.warning(f'*******************{ADVANCED_COMPONENT_TYPES} line no 47 component.py')
 
 ADVANCED_PROBLEM_TYPES = settings.ADVANCED_PROBLEM_TYPES
 
@@ -440,6 +441,7 @@ def get_component_templates(courselike, library=False):  # lint-amnesty, pylint:
         "support_legend": create_support_legend_dict()
     }
     advanced_component_types = _advanced_component_types(allow_unsupported)
+    log.warning(f'*******************{advanced_component_types} line no 443 component.py')
     # Set component types according to course policy file
     if isinstance(course_advanced_keys, list):
         for category in course_advanced_keys:
