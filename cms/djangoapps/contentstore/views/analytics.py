@@ -82,4 +82,4 @@ def course_analytics(request):
         'split_studio_home': split_library_view_on_dashboard(),
         'active_tab': 'analytics'
     }
-    return render_to_response('instructor-dashboard.html', data)
+    return render_to_response('index.html', data)

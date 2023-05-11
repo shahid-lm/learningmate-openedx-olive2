@@ -168,7 +168,7 @@ def index(request, extra_context=None, user=AnonymousUser()):
     # Add marketable programs to the context.
     context['programs_list'] = get_programs_with_type(request.site, include_hidden=False)
 
-    return render_to_response('instructor-dashboard.html', context)
+    return render_to_response('index.html', context)
 
 
 def compose_activation_email(user, user_registration=None, route_enabled=False, profile_name='', redirect_url=None):

@@ -569,7 +569,7 @@ def course_listing(request):
     active_courses, archived_courses = _process_courses_list(courses_iter, in_process_course_actions, split_archived)
     in_process_course_actions = [format_in_process_course_view(uca) for uca in in_process_course_actions]
 
-    return render_to_response('instructor-dashboard.html', {
+    return render_to_response('index.html', {
         'courses': active_courses,
         'split_studio_home': split_library_view_on_dashboard(),
         'archived_courses': archived_courses,
@@ -613,7 +613,7 @@ def library_listing(request):
         'split_studio_home': split_library_view_on_dashboard(),
         'active_tab': 'libraries'
     }
-    return render_to_response('instructor-dashboard.html', data)
+    return render_to_response('index.html', data)
 
 
 def _format_library_for_view(library, request):

@@ -997,6 +997,6 @@ class DashboardStatisticsView(RetrieveAPIView):
 @api_view(['GET'])
 def render_instructor_dashboard(request):
     try:
-        return render(request, 'instructor-dashboard.html')
+        return render(request, 'teacher-dashboard.html')
     except Exception as e:
         return Response({'failed' : {str(e)}})

@@ -69,7 +69,7 @@ class MaintenanceIndexView(View):
     @method_decorator(require_global_staff)
     def get(self, request):
         """Render the maintenance index view. """
-        return render_to_response('maintenance/instructor-dashboard.html', {
+        return render_to_response('maintenance/index.html', {
             'views': MAINTENANCE_VIEWS,
         })
 

@@ -54,4 +54,4 @@ def index(request):
     context = {
         "urls": SUPPORT_INDEX_URLS
     }
-    return render_to_response("support/instructor-dashboard.html", context)
+    return render_to_response("support/index.html", context)
