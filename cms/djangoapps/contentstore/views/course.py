@@ -33,6 +33,7 @@ from opaque_keys.edx.locator import BlockUsageLocator
 from organizations.api import add_organization_course, ensure_organization
 from organizations.exceptions import InvalidOrganizationException
 from rest_framework.exceptions import ValidationError
+from rest_framework.decorators import authentication_classes
 
 from cms.djangoapps.course_creators.views import add_user_with_status_unrequested, get_course_creator_status
 from cms.djangoapps.models.settings.course_grading import CourseGradingModel
@@ -80,6 +81,14 @@ from xmodule.modulestore.django import modulestore  # lint-amnesty, pylint: disa
 from xmodule.modulestore.exceptions import DuplicateCourseError, ItemNotFoundError  # lint-amnesty, pylint: disable=wrong-import-order
 from xmodule.partitions.partitions import UserPartition  # lint-amnesty, pylint: disable=wrong-import-order
 from xmodule.tabs import CourseTab, CourseTabList, InvalidTabsException  # lint-amnesty, pylint: disable=wrong-import-order
+from openedx.core.lib.api.authentication import BearerAuthenticationAllowInactiveUser,BearerAuthentication
+from rest_framework.authentication import SessionAuthentication
+from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
+from edx_rest_framework_extensions.auth.session.authentication import SessionAuthenticationAllowInactiveUser
+from rest_framework.decorators import api_view
+from rest_framework import status
+from rest_framework.response import Response
+
 
 from ..course_group_config import (
     COHORT_SCHEME,
@@ -127,7 +136,8 @@ __all__ = ['course_info_handler', 'course_handler', 'course_listing',
            'course_notifications_handler',
            'textbooks_list_handler', 'textbooks_detail_handler',
            'group_configurations_list_handler', 'group_configurations_detail_handler',
-           'get_course_and_check_access']
+           'get_course_and_check_access',
+           'course_crud_apis']
 
 WAFFLE_NAMESPACE = 'studio_home'
 ENABLE_GLOBAL_STAFF_OPTIMIZATION = WaffleSwitch(  # lint-amnesty, pylint: disable=toggle-missing-annotation
@@ -248,6 +258,7 @@ def _dismiss_notification(request, course_action_state_id):
 
 
 @login_required
+# @authentication_classes(BearerAuthenticationAllowInactiveUser,)
 def course_handler(request, course_key_string=None):
     """
     The restful handler for course specific requests.
@@ -1907,3 +1918,73 @@ def _get_course_creator_status(user):
         course_creator_status = 'granted'
 
     return course_creator_status
+
+@api_view(['POST'])
+@authentication_classes((BearerAuthenticationAllowInactiveUser ,
+                         #BearerAuthentication,
+                         #SessionAuthentication,
+                         JwtAuthentication,
+                         SessionAuthenticationAllowInactiveUser
+                         ))
+def course_crud_apis(request):
+    """
+        Method 'POST' (Create a new course API): 
+            Payload Example : {
+                        "org": "LM",
+                        "number": "CS150",
+                        "display_name": "APITest1",
+                        "run": "2023_V1"
+                    }
+    """
+    try:
+        org = request.data.get('org')
+        course = request.data.get('number', request.data.get('course'))
+        display_name = request.data.get('display_name')
+        run = request.data.get('run')
+        start = request.data.get('start', CourseFields.start.default)
+        
+        fields = {'start': start}
+        if display_name is not None:
+            fields['display_name'] = display_name
+        wiki_slug = f"{org}.{course}.{run}"
+        definition_data = {'wiki_slug': wiki_slug}
+        fields.update(definition_data)
+
+        #Validation for user role
+        has_course_creator_role = is_content_creator(request.user, org)
+        if not has_course_creator_role:
+            return Response(
+                {'error': 'User doesn\'t have course create permission'},
+                status=status.HTTP_409_CONFLICT
+            )
+        #Validation for payload
+        if not settings.FEATURES.get('ALLOW_UNICODE_COURSE_ID'):
+            if _has_non_ascii_characters(org) or _has_non_ascii_characters(course) or _has_non_ascii_characters(run):
+                return Response(
+                    {'error': 'Special characters not allowed in organization, course number, and course run.'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        new_course = create_new_course(request.user, org, course, run, fields)
+        return Response({
+            'url': reverse_course_url('course_handler', new_course.id),
+            'course_key': str(new_course.id),
+        }, status=status.HTTP_201_CREATED)
+    except DuplicateCourseError:
+        return Response({
+            'ErrMsg': _(
+                'There is already a course defined with the same '
+                'organization and course number. Please '
+                'change either organization or course number to be unique.'
+            ),
+            'OrgErrMsg': _(
+                'Please change either the organization or '
+                'course number so that it is unique.'),
+            'CourseErrMsg': _(
+                'Please change either the organization or '
+                'course number so that it is unique.'),
+        }, status=status.HTTP_409_CONFLICT)
+    except Exception as e:
+        return Response(
+                    {'error': f'{str(e)}'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
