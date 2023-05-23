@@ -4,7 +4,7 @@ Course Home Course Metadata Serializers. Returns Course Metadata used for all
 Course Home pages.
 """
 
-
+from .course_metadata import CourseActivityLog
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from rest_framework import serializers
@@ -48,3 +48,10 @@ class CourseHomeMetadataSerializer(VerifiedModeSerializer):
     username = serializers.CharField()
     user_timezone = serializers.CharField()
     can_view_certificate = serializers.BooleanField()
+
+
+class CourseActivitySerializer(serializers.ModelSerializer):
+    class Meta(object):
+        """Meta options."""
+        model = CourseActivityLog
+        fields = '__all__'

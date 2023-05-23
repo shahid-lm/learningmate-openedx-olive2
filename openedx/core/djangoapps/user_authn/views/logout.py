@@ -16,6 +16,8 @@ from openedx.core.djangoapps.safe_sessions.middleware import mark_user_change_as
 from openedx.core.djangoapps.user_authn.cookies import delete_logged_in_cookies
 from openedx.core.djangoapps.user_authn.utils import is_safe_login_or_logout_redirect
 from common.djangoapps.third_party_auth import pipeline as tpa_pipeline
+from lms.djangoapps.course_home_api.course_metadata.models import CourseActivityLog
+import datetime
 
 
 class LogoutView(TemplateView):
@@ -38,6 +40,19 @@ class LogoutView(TemplateView):
 
         TODO: remove GET as an allowed method, and update all callers to use POST.
         """
+        # course end time
+        ct = datetime.datetime.now()
+        #ts = ct.timestamp()
+        #obj = CourseActivityLog.objects.filter(user_id).latest('start_time')
+        #obj = CourseActivityLog.objects.filter(user_id=request.user.id).order_by('id')[0]
+        obj = CourseActivityLog.objects.filter(user_id=int(request.user.id),end_time=None).first()
+        #if obj.end_time is None:
+        # if obj.end_time is None:
+        obj.end_time = ct
+        obj.save()
+
+
+
         return self.get(request, *args, **kwargs)
 
     @property
@@ -156,5 +171,8 @@ class LogoutView(TemplateView):
             'tpa_logout_url': self.tpa_logout_url,
             'show_tpa_logout_link': self._show_tpa_logout_link(target, referrer),
         })
+
+
+
 
         return context
