@@ -3,7 +3,8 @@
 Course Home Course Metadata Serializers. Returns Course Metadata used for all
 Course Home pages.
 """
-from lms.djangoapps.course_home_api.course_metadata.models import CourseActivityLog
+#from lms.djangoapps.course_home_api.course_metadata.models import CourseActivityLog
+from lms.djangoapps.course_home_api.models import CourseActivityLog
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from rest_framework import serializers

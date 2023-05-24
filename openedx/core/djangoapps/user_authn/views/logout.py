@@ -16,7 +16,8 @@ from openedx.core.djangoapps.safe_sessions.middleware import mark_user_change_as
 from openedx.core.djangoapps.user_authn.cookies import delete_logged_in_cookies
 from openedx.core.djangoapps.user_authn.utils import is_safe_login_or_logout_redirect
 from common.djangoapps.third_party_auth import pipeline as tpa_pipeline
-from lms.djangoapps.course_home_api.course_metadata.models import CourseActivityLog
+#from lms.djangoapps.course_home_api.course_metadata.models import CourseActivityLog
+from lms.djangoapps.course_home_api.models import CourseActivityLog
 import datetime
 
 
