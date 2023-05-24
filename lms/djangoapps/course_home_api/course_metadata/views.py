@@ -21,7 +21,7 @@ from lms.djangoapps.courseware.context_processor import user_timezone_locale_pre
 from lms.djangoapps.courseware.courses import check_course_access
 from lms.djangoapps.courseware.masquerade import setup_masquerade
 from lms.djangoapps.courseware.tabs import get_course_tab_list
-from lms.djangoapps.course_home_api.course_metadata.models import CourseActivityLog
+
 
 class CourseHomeMetadataView(RetrieveAPIView):
     """
