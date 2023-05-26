@@ -66,7 +66,7 @@ from common.djangoapps.student.models import (
 from common.djangoapps.util.milestones_helpers import get_pre_requisite_courses_not_completed
 from xmodule.modulestore.django import modulestore  # lint-amnesty, pylint: disable=wrong-import-order
 from lms.djangoapps.course_home_api.models import CourseActivityLog
-import datetime
+
 
 log = logging.getLogger("edx.student")
 
@@ -517,7 +517,7 @@ def student_dashboard(request):  # lint-amnesty, pylint: disable=too-many-statem
 
     """
     log.info("logout code run for table entry")
-    ct = datetime.now()
+    ct = datetime.datetime.now()
     obj = CourseActivityLog.objects.filter(user_id=int(request.user.id)).first()
     if obj.end_time is None:
         obj.end_time = ct

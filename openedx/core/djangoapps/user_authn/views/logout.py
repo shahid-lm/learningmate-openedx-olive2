@@ -43,7 +43,7 @@ class LogoutView(TemplateView):
         """
         # course end time
         log.info("logout code run for table entry")
-        ct = datetime.now()
+        ct = datetime.datetime.now()
         obj = CourseActivityLog.objects.filter(user_id=int(request.user.id)).first()
         if obj.end_time is None:
             obj.end_time = ct
