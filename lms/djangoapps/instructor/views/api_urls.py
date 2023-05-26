@@ -18,7 +18,8 @@ v1_api_urls = [
     re_path(rf'^reports/{COURSE_ID_PATTERN}/generate/problem_responses$', api.ProblemResponseReportInitiate.as_view(),
             name='generate_problem_responses', ),
     path('instructor_dashboard_data/', instructor_dashboard.DashboardStatisticsView.as_view(), name='instructor_dashboard_customized'),
-    path('instructor_analytical_dashboard', instructor_dashboard.render_instructor_dashboard, name='instructor_analytical_dashboard')
+    path('instructor_analytical_dashboard', instructor_dashboard.render_instructor_dashboard, name='instructor_analytical_dashboard'),
+    path('api/course_activity_time_log/', instructor_dashboard.CourseTimeSpend.as_view(), name='course_activity_time_log')
 ]
 
 urlpatterns = [

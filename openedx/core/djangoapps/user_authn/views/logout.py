@@ -42,15 +42,12 @@ class LogoutView(TemplateView):
         TODO: remove GET as an allowed method, and update all callers to use POST.
         """
         # course end time
-        ct = datetime.datetime.now()
-        #ts = ct.timestamp()
-        #obj = CourseActivityLog.objects.filter(user_id).latest('start_time')
-        #obj = CourseActivityLog.objects.filter(user_id=request.user.id).order_by('id')[0]
-        obj = CourseActivityLog.objects.filter(user_id=int(request.user.id),end_time=None).first()
-        #if obj.end_time is None:
-        # if obj.end_time is None:
-        obj.end_time = ct
-        obj.save()
+        log.info("logout code run for table entry")
+        ct = datetime.now()
+        obj = CourseActivityLog.objects.filter(user_id=int(request.user.id)).first()
+        if obj.end_time is None:
+            obj.end_time = ct
+            obj.save()
 
 
 
