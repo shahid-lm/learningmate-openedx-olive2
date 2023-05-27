@@ -516,12 +516,13 @@ def student_dashboard(request):  # lint-amnesty, pylint: disable=too-many-statem
         The dashboard response.
 
     """
-    log.info("logout code run for table entry")
+
     ct = datetime.datetime.now()
-    obj = CourseActivityLog.objects.filter(user_id=int(request.user.id)).order_by('-id')[0]
-    if obj.end_time is None:
-        obj.end_time = ct
-        obj.save()
+    obj = CourseActivityLog.objects.filter(user_id=int(request.user.id)).last()
+    if obj:
+        if obj.end_time is None:
+            obj.end_time = ct
+            obj.save()
 
     user = request.user
     if not UserProfile.objects.filter(user=user).exists():
