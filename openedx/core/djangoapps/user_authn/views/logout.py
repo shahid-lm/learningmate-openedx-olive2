@@ -86,6 +86,16 @@ class LogoutView(TemplateView):
         delete_logged_in_cookies(response)
 
         mark_user_change_as_expected(None)
+
+        # course end time
+
+        ct = datetime.datetime.now()
+        obj = CourseActivityLog.objects.filter(user_id=int(request.user.id)).last()
+        if obj:
+            if obj.end_time is None:
+                obj.end_time = ct
+                obj.save()
+
         return response
 
     def _build_logout_url(self, url):
@@ -159,17 +169,5 @@ class LogoutView(TemplateView):
             'tpa_logout_url': self.tpa_logout_url,
             'show_tpa_logout_link': self._show_tpa_logout_link(target, referrer),
         })
-
-
-        # course end time
-
-        ct = datetime.datetime.now()
-        obj = CourseActivityLog.objects.filter(user_id=int(request.user.id)).last()
-        if obj:
-            if obj.end_time is None:
-                obj.end_time = ct
-                obj.save()
-
-
 
         return context
