@@ -141,7 +141,7 @@ class CourseHomeMetadataView(RetrieveAPIView):
 
         activity_serializer = CourseActivitySerializer(
             data={'user_id': int(request.user.id),
-                  'course_id': str(course_key)
+                  'course_id': str(course.id)
                   })
         if activity_serializer.is_valid():
             activity_serializer.save()

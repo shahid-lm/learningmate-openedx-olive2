@@ -518,7 +518,7 @@ def student_dashboard(request):  # lint-amnesty, pylint: disable=too-many-statem
     """
     log.info("logout code run for table entry")
     ct = datetime.datetime.now()
-    obj = CourseActivityLog.objects.filter(user_id=int(request.user.id)).first()
+    obj = CourseActivityLog.objects.filter(user_id=int(request.user.id)).order_by('-id')[0]
     if obj.end_time is None:
         obj.end_time = ct
         obj.save()

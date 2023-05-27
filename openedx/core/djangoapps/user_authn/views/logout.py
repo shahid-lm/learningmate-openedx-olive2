@@ -41,16 +41,6 @@ class LogoutView(TemplateView):
 
         TODO: remove GET as an allowed method, and update all callers to use POST.
         """
-        # course end time
-        log.info("logout code run for table entry")
-        ct = datetime.datetime.now()
-        obj = CourseActivityLog.objects.filter(user_id=int(request.user.id)).first()
-        if obj.end_time is None:
-            obj.end_time = ct
-            obj.save()
-
-
-
         return self.get(request, *args, **kwargs)
 
     @property
@@ -171,6 +161,13 @@ class LogoutView(TemplateView):
         })
 
 
+        # course end time
+        log.info("logout code run for table entry")
+        ct = datetime.datetime.now()
+        obj = CourseActivityLog.objects.filter(user_id=int(request.user.id)).order_by('-id')[0]
+        if obj.end_time is None:
+            obj.end_time = ct
+            obj.save()
 
 
         return context
