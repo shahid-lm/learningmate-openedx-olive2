@@ -43,16 +43,6 @@ class LogoutView(TemplateView):
         """
         return self.get(request, *args, **kwargs)
 
-    def get(self, request, *args, **kwargs):
-        # course end time
-
-        ct = datetime.datetime.now()
-        obj = CourseActivityLog.objects.filter(user_id=request.user.id).last()
-        if obj:
-            if obj.end_time is None:
-                obj.end_time = ct
-                obj.save()
-        return None
     @property
     def target(self):
         """
@@ -85,7 +75,12 @@ class LogoutView(TemplateView):
     def dispatch(self, request, *args, **kwargs):
 
 
-
+        ct = datetime.datetime.now()
+        obj = CourseActivityLog.objects.filter(user_id=request.user.id).last()
+        if obj:
+            if obj.end_time is None:
+                obj.end_time = ct
+                obj.save()
 
         # We do not log here, because we have a handler registered to perform logging on successful logouts.
 
@@ -100,6 +95,9 @@ class LogoutView(TemplateView):
         delete_logged_in_cookies(response)
 
         mark_user_change_as_expected(None)
+
+        # course end time
+
 
         return response
 
