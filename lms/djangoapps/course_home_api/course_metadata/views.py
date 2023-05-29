@@ -137,7 +137,7 @@ class CourseHomeMetadataView(RetrieveAPIView):
         context['enrollment'] = enrollment
         serializer = self.get_serializer_class()(data, context=context)
 
-        if not has_access(request.user, 'staff ', course_key).has_access:
+        if not original_user_is_global_staff:
             ct = datetime.datetime.now()
             obj = CourseActivityLog.objects.filter(user_id=request.user.id).last()
             if obj:
