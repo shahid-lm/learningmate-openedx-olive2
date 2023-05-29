@@ -1037,7 +1037,11 @@ def course_time_log(course_id):
                     tdh = (course_time.end_time - course_time.start_time).seconds
                     total_time += tdh
 
-            course_time = {"course_id": course_id, "total_time": total_time}
+            course_key = CourseKey.from_string(course_id)
+            course = get_course_by_id(course_key, depth=None)
+            course_name = course.display_name_with_default
+
+            course_time = {"course_id": course_name, "total_time": total_time}
             return course_time
         except Exception as e:
             log.error(f"course_time_log {str(e)}")

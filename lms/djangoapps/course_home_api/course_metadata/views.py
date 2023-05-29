@@ -21,7 +21,7 @@ from lms.djangoapps.courseware.context_processor import user_timezone_locale_pre
 from lms.djangoapps.courseware.courses import check_course_access
 from lms.djangoapps.courseware.masquerade import setup_masquerade
 from lms.djangoapps.courseware.tabs import get_course_tab_list
-
+from lms.djangoapps.course_home_api.models import CourseActivityLog
 
 class CourseHomeMetadataView(RetrieveAPIView):
     """
@@ -137,17 +137,17 @@ class CourseHomeMetadataView(RetrieveAPIView):
         context['enrollment'] = enrollment
         serializer = self.get_serializer_class()(data, context=context)
 
-
-
-        activity_serializer = CourseActivitySerializer(
-            data={'user_id': int(request.user.id),
-                  'course_id': str(course.id)
-                  })
-        if activity_serializer.is_valid():
-            activity_serializer.save()
-
-
-
+        if not has_access(request.user, 'staff ', course_key).has_access:
+            ct = datetime.datetime.now()
+            obj = CourseActivityLog.objects.filter(user_id=request.user.id).last()
+            if obj:
+                if obj.end_time is not None:
+                    activity_serializer = CourseActivitySerializer(
+                        data={'user_id': int(request.user.id),
+                              'course_id': str(course.id)
+                              })
+                    if activity_serializer.is_valid():
+                        activity_serializer.save()
 
 
         return Response(serializer.data)
