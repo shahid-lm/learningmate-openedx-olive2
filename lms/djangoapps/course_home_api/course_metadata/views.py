@@ -138,7 +138,6 @@ class CourseHomeMetadataView(RetrieveAPIView):
         serializer = self.get_serializer_class()(data, context=context)
 
         if not original_user_is_global_staff:
-            ct = datetime.datetime.now()
             obj = CourseActivityLog.objects.filter(user_id=request.user.id).last()
             if obj:
                 if obj.end_time is not None:
