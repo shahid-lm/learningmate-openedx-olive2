@@ -147,6 +147,14 @@ class CourseHomeMetadataView(RetrieveAPIView):
                               })
                     if activity_serializer.is_valid():
                         activity_serializer.save()
+            else:
+                activity_serializer = CourseActivitySerializer(
+                    data={'user_id': int(request.user.id),
+                          'course_id': str(course.id)
+                          })
+                if activity_serializer.is_valid():
+                    activity_serializer.save()
+
 
 
         return Response(serializer.data)
