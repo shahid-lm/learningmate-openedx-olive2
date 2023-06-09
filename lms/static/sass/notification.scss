@@ -1,8 +1,9 @@
 
 
 .notification {
-    position: relative;
+    // position: relative;
     text-align: right;
+    cursor: pointer;
 
     img {
         padding: 10px 0;
@@ -39,6 +40,10 @@
         padding: 10px;
         margin-bottom: 10px;
         border-radius: 5px;
+        &:hover {
+            color: theme-color("dark");
+            background-color: theme-color("light");
+        }
     }
 
     .avatar {
