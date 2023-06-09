@@ -11,8 +11,7 @@ from openedx.core.djangoapps.config_model_utils.models import StackedConfigurati
 class DisableProgressPageStackedConfig(StackedConfigurationModel):
     """
     Stacked Config Model for disabling the frontend-app-learning progress page
-    """
-
+    """ 
     STACKABLE_FIELDS = ('disabled',)
     # Since this config disables the progress page,
     # it seemed it would be clearer to use a disabled flag instead of an enabled flag.
@@ -23,3 +22,16 @@ class DisableProgressPageStackedConfig(StackedConfigurationModel):
         return "DisableProgressPageStackedConfig(disabled={!r})".format(
             self.disabled
         )
+
+class CourseActivityLog(models.Model):
+    class Meta:
+        app_label = "course_home_api"
+        
+    id = models.AutoField(primary_key=True)
+    user_id = models.IntegerField(max_length=225)
+    course_id = models.CharField(max_length=300)
+    start_time = models.DateTimeField(auto_now_add=True)
+    end_time = models.DateTimeField(default=None, null=True)
+
+    def __str__(self):
+        return self.user_id

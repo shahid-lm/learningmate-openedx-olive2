@@ -16,6 +16,9 @@ from openedx.core.djangoapps.safe_sessions.middleware import mark_user_change_as
 from openedx.core.djangoapps.user_authn.cookies import delete_logged_in_cookies
 from openedx.core.djangoapps.user_authn.utils import is_safe_login_or_logout_redirect
 from common.djangoapps.third_party_auth import pipeline as tpa_pipeline
+#from lms.djangoapps.course_home_api.course_metadata.models import CourseActivityLog
+from lms.djangoapps.course_home_api.models import CourseActivityLog
+import datetime
 
 
 class LogoutView(TemplateView):
@@ -70,6 +73,15 @@ class LogoutView(TemplateView):
         return target_url if use_target_url else self.default_target
 
     def dispatch(self, request, *args, **kwargs):
+
+
+        ct = datetime.datetime.now()
+        obj = CourseActivityLog.objects.filter(user_id=request.user.id).last()
+        if obj:
+            if obj.end_time is None:
+                obj.end_time = ct
+                obj.save()
+
         # We do not log here, because we have a handler registered to perform logging on successful logouts.
 
         # Get third party auth provider's logout url
@@ -83,6 +95,10 @@ class LogoutView(TemplateView):
         delete_logged_in_cookies(response)
 
         mark_user_change_as_expected(None)
+
+        # course end time
+
+
         return response
 
     def _build_logout_url(self, url):

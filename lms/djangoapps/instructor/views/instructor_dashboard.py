@@ -84,6 +84,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET
 from rest_framework.decorators import api_view
 from django.shortcuts import render
+from lms.djangoapps.course_home_api.models import CourseActivityLog
 
 
 log = logging.getLogger(__name__)
@@ -1000,3 +1001,47 @@ def render_instructor_dashboard(request):
         return render(request, 'teacher-dashboard.html')
     except Exception as e:
         return Response({'failed' : {str(e)}})
+
+
+
+
+class CourseTimeSpend(RetrieveAPIView):
+    authentication_classes = (JwtAuthentication,
+        BearerAuthenticationAllowInactiveUser,
+        SessionAuthenticationAllowInactiveUser,
+    )
+    permission_classes = (IsAuthenticated,
+     )
+    serializer_class = AcessroleSerializer
+
+    def get(self, request, *args, **kwarg):
+
+        course_data = []
+        try:
+            all_course_ids = list(set(list(CourseAccessRole.objects.filter(user_id=request.user.id).values_list("course_id", flat=True))))
+            for course_id in all_course_ids:
+                course_id_string = str(course_id)
+                course_time_info = course_time_log(course_id=course_id_string)
+                course_data.append(course_time_info)
+            return Response({"course_time_spend_data": course_data})
+        except Exception as e:
+            return Response({"error": str(e)})
+
+
+def course_time_log(course_id):
+        try:
+            total_time = 0
+            course_times = CourseActivityLog.objects.filter(course_id=course_id)
+            for course_time in course_times:
+                if course_time.end_time and course_time.start_time:
+                    tdh = (course_time.end_time - course_time.start_time).seconds
+                    total_time += tdh
+
+            course_key = CourseKey.from_string(course_id)
+            course = get_course_by_id(course_key, depth=None)
+            course_name = course.display_name_with_default
+
+            course_time = {"course_id": course_name, "total_time": total_time}
+            return course_time
+        except Exception as e:
+            log.error(f"course_time_log {str(e)}")

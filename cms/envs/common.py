@@ -1686,6 +1686,7 @@ INSTALLED_APPS = [
     'lms.djangoapps.survey.apps.SurveyConfig',
     'lms.djangoapps.verify_student.apps.VerifyStudentConfig',
     'completion',
+    'lms.djangoapps.course_home_api',
 
     # System Wide Roles
     'openedx.core.djangoapps.system_wide_roles',

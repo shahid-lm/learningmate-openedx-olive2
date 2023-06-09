@@ -15,13 +15,13 @@ from openedx.core.djangoapps.courseware_api.utils import get_celebrations_dict
 from common.djangoapps.student.models import CourseEnrollment
 from lms.djangoapps.course_api.api import course_detail
 from lms.djangoapps.course_goals.models import UserActivity
-from lms.djangoapps.course_home_api.course_metadata.serializers import CourseHomeMetadataSerializer
+from lms.djangoapps.course_home_api.course_metadata.serializers import CourseHomeMetadataSerializer, CourseActivitySerializer
 from lms.djangoapps.courseware.access import has_access
 from lms.djangoapps.courseware.context_processor import user_timezone_locale_prefs
 from lms.djangoapps.courseware.courses import check_course_access
 from lms.djangoapps.courseware.masquerade import setup_masquerade
 from lms.djangoapps.courseware.tabs import get_course_tab_list
-
+from lms.djangoapps.course_home_api.models import CourseActivityLog
 
 class CourseHomeMetadataView(RetrieveAPIView):
     """
@@ -136,4 +136,25 @@ class CourseHomeMetadataView(RetrieveAPIView):
         context['course_overview'] = course
         context['enrollment'] = enrollment
         serializer = self.get_serializer_class()(data, context=context)
+
+        if not original_user_is_global_staff:
+            obj = CourseActivityLog.objects.filter(user_id=request.user.id).last()
+            if obj:
+                if obj.end_time is not None:
+                    activity_serializer = CourseActivitySerializer(
+                        data={'user_id': int(request.user.id),
+                              'course_id': str(course.id)
+                              })
+                    if activity_serializer.is_valid():
+                        activity_serializer.save()
+            else:
+                activity_serializer = CourseActivitySerializer(
+                    data={'user_id': int(request.user.id),
+                          'course_id': str(course.id)
+                          })
+                if activity_serializer.is_valid():
+                    activity_serializer.save()
+
+
+
         return Response(serializer.data)
