@@ -1,6 +1,7 @@
 var main = function() {
-    $('.notification img').click(function() {
-      $('.notification-menu').toggle(); 
-    });
+    $('.notification img').on(click(function() {
+      $('.notification-menu').toggle();
+      $('.notification-badge').hide();
+    }));
 }
 $(document).ready(main);
