@@ -248,6 +248,16 @@
           text-decoration: none;
           cursor: pointer;
 
+          .notification-badge {
+            position: relative;
+            top: -10px;
+            left: -10px;
+            padding: 3px 9px;
+            border-radius: 50%;
+            background: red;
+            color: white;
+          }
+
           .notification-menu {
             border: 1px solid theme-color("secondary");
             position: absolute;
