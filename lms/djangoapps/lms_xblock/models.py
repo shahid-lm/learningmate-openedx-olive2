@@ -47,4 +47,4 @@ class StaffGradedSubmissions(models.Model):
     
     class Meta:
         app_label = "lms_xblock"
-        db_table = "staffgradedsubmissions"
+        # db_table = "staffgradedsubmissions"
