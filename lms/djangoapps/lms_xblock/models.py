@@ -42,9 +42,10 @@ class StaffGradedSubmissions(models.Model):
     direct_link = models.URLField(db_column= "direct_link",help_text="Direct link to the assignment",max_length=300,blank=True)
     student_id = models.ForeignKey(User,help_text="Student Id,PK of auth_user", db_column="student_id", on_delete=models.CASCADE)
     student_email = models.CharField(db_column= "student_email",help_text="Email Id for student,taken as str to allow dummy emails",max_length=200)
-    submitted_at = models.DateTimeField(db_column= "submitted_at",auto_created=True)
+    submitted_at = models.DateTimeField(db_column= "submitted_at",auto_now_add=True)
     marked_as_read = models.BooleanField(db_column= "marked_as_read",default=False)
     
     class Meta:
         app_label = "lms_xblock"
-        db_table = "staffgradedsubmissions"
+        ordering = ['-submitted_at']
+        # db_table = "staffgradedsubmissions"
