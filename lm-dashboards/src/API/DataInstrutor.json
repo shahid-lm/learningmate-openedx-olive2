@@ -1,0 +1,385 @@
+{
+    "instructor_dashboard_data": [
+        {
+            "studio_url": "//studio.tutor.bhbazar.com/course/course-v1:LM+CS105+2023_V1",
+            "sections": [
+                {
+                    "section_key": "course_info",
+                    "section_display_name": "Course Info",
+                    "access": {
+                        "admin": true,
+                        "instructor": true,
+                        "finance_admin": false,
+                        "sales_admin": false,
+                        "staff": true,
+                        "forum_admin": false,
+                        "data_researcher": true
+                    },
+                    "course_id": "course-v1:LM+CS105+2023_V1",
+                    "course_display_name": "Demo_course3",
+                    "course_org": "LM",
+                    "course_number": "CS105",
+                    "has_started": true,
+                    "has_ended": false,
+                    "start_date": "01-01-2023",
+                    "end_date": "01-01-2030",
+                    "num_sections": 2,
+                    "list_instructor_tasks_url": "/courses/course-v1:LM+CS105+2023_V1/instructor/api/list_instructor_tasks",
+                    "enrollment_count": {
+                        "audit": 3,
+                        "total": 10
+                    },
+                    "grade_cutoffs": "Pass: 0.5",
+                    "course_errors": [{
+
+                        "type": "All courses:2",
+                        "types": "Demo_course3"
+
+
+                    }
+                    ]
+                }
+            ],
+            "certificate_allowlist": [],
+            "certificate_invalidations": []
+        },
+        {
+            "studio_url": "//studio.tutor.bhbazar.com/course/course-v1:LM+CS001+2023_LM",
+            "sections": [
+                {
+                    "section_key": "course_info",
+                    "section_display_name": "Course Info",
+                    "access": {
+                        "admin": true,
+                        "instructor": true,
+                        "finance_admin": false,
+                        "sales_admin": false,
+                        "staff": true,
+                        "forum_admin": false,
+                        "data_researcher": true
+                    },
+                    "course_id": "course-v1:LM+CS001+2023_LM",
+                    "course_display_name": "Empty",
+                    "course_org": "LM",
+                    "course_number": "CS001",
+                    "has_started": false,
+                    "has_ended": false,
+                    "start_date": "01-01-2030",
+                    "end_date": null,
+                    "num_sections": 5,
+                    "list_instructor_tasks_url": "/courses/course-v1:LM+CS001+2023_LM/instructor/api/list_instructor_tasks",
+                    "enrollment_count": {
+                        "audit": 3,
+                        "total": 3
+                    },
+                    "grade_cutoffs": "Pass: 0.5",
+                    "course_errors": [{
+
+                        "type": "Empty",
+                        "types": "Demo_course3"
+
+                    }]
+                }
+            ],
+            "certificate_allowlist": [],
+            "certificate_invalidations": []
+        }
+        ,
+        {
+            "studio_url": "//studio.tutor.bhbazar.com/course/course-v1:LM+CS001+2023_LM",
+            "sections": [
+                {
+                    "section_key": "course_info",
+                    "section_display_name": "Course Info",
+                    "access": {
+                        "admin": true,
+                        "instructor": true,
+                        "finance_admin": false,
+                        "sales_admin": false,
+                        "staff": true,
+                        "forum_admin": false,
+                        "data_researcher": true
+                    },
+                    "course_id": "course-v1:LM+CS001+2023_LM",
+                    "course_display_name": "Empty",
+                    "course_org": "LM",
+                    "course_number": "CS001",
+                    "has_started": false,
+                    "has_ended": false,
+                    "start_date": "01-01-2030",
+                    "end_date": null,
+                    "num_sections": 5,
+                    "list_instructor_tasks_url": "/courses/course-v1:LM+CS001+2023_LM/instructor/api/list_instructor_tasks",
+                    "enrollment_count": {
+                        "audit": 3,
+                        "total": 3
+                    },
+                    "grade_cutoffs": "Pass: 0.5",
+                    "course_errors": [{
+
+                        "type": "Empty",
+                        "types": "Demo_course3"
+
+                    }]
+                }
+            ],
+            "certificate_allowlist": [],
+            "certificate_invalidations": []
+        }
+,
+        {
+            "studio_url": "//studio.tutor.bhbazar.com/course/course-v1:LM+CS001+2023_LM",
+            "sections": [
+                {
+                    "section_key": "course_info",
+                    "section_display_name": "Course Info",
+                    "access": {
+                        "admin": true,
+                        "instructor": true,
+                        "finance_admin": false,
+                        "sales_admin": false,
+                        "staff": true,
+                        "forum_admin": false,
+                        "data_researcher": true
+                    },
+                    "course_id": "course-v1:LM+CS001+2023_LM",
+                    "course_display_name": "Empty",
+                    "course_org": "LM",
+                    "course_number": "CS001",
+                    "has_started": false,
+                    "has_ended": false,
+                    "start_date": "01-01-2030",
+                    "end_date": null,
+                    "num_sections": 5,
+                    "list_instructor_tasks_url": "/courses/course-v1:LM+CS001+2023_LM/instructor/api/list_instructor_tasks",
+                    "enrollment_count": {
+                        "audit": 3,
+                        "total": 3
+                    },
+                    "grade_cutoffs": "Pass: 0.5",
+                    "course_errors": [{
+
+                        "type": "Empty",
+                        "types": "Demo_course3"
+
+                    }]
+                }
+            ],
+            "certificate_allowlist": [],
+            "certificate_invalidations": []
+        }
+,
+        {
+            "studio_url": "//studio.tutor.bhbazar.com/course/course-v1:LM+CS001+2023_LM",
+            "sections": [
+                {
+                    "section_key": "course_info",
+                    "section_display_name": "Course Info",
+                    "access": {
+                        "admin": true,
+                        "instructor": true,
+                        "finance_admin": false,
+                        "sales_admin": false,
+                        "staff": true,
+                        "forum_admin": false,
+                        "data_researcher": true
+                    },
+                    "course_id": "course-v1:LM+CS001+2023_LM",
+                    "course_display_name": "Empty",
+                    "course_org": "LM",
+                    "course_number": "CS001",
+                    "has_started": false,
+                    "has_ended": false,
+                    "start_date": "01-01-2030",
+                    "end_date": null,
+                    "num_sections": 5,
+                    "list_instructor_tasks_url": "/courses/course-v1:LM+CS001+2023_LM/instructor/api/list_instructor_tasks",
+                    "enrollment_count": {
+                        "audit": 3,
+                        "total": 3
+                    },
+                    "grade_cutoffs": "Pass: 0.5",
+                    "course_errors": [{
+
+                        "type": "Empty",
+                        "types": "Demo_course3"
+
+                    }]
+                }
+            ],
+            "certificate_allowlist": [],
+            "certificate_invalidations": []
+        }
+,
+        {
+            "studio_url": "//studio.tutor.bhbazar.com/course/course-v1:LM+CS001+2023_LM",
+            "sections": [
+                {
+                    "section_key": "course_info",
+                    "section_display_name": "Course Info",
+                    "access": {
+                        "admin": true,
+                        "instructor": true,
+                        "finance_admin": false,
+                        "sales_admin": false,
+                        "staff": true,
+                        "forum_admin": false,
+                        "data_researcher": true
+                    },
+                    "course_id": "course-v1:LM+CS001+2023_LM",
+                    "course_display_name": "Empty",
+                    "course_org": "LM",
+                    "course_number": "CS001",
+                    "has_started": false,
+                    "has_ended": false,
+                    "start_date": "01-01-2030",
+                    "end_date": null,
+                    "num_sections": 5,
+                    "list_instructor_tasks_url": "/courses/course-v1:LM+CS001+2023_LM/instructor/api/list_instructor_tasks",
+                    "enrollment_count": {
+                        "audit": 3,
+                        "total": 3
+                    },
+                    "grade_cutoffs": "Pass: 0.5",
+                    "course_errors": [{
+
+                        "type": "Empty",
+                        "types": "Demo_course3"
+
+                    }]
+                }
+            ],
+            "certificate_allowlist": [],
+            "certificate_invalidations": []
+        }
+,
+        {
+            "studio_url": "//studio.tutor.bhbazar.com/course/course-v1:LM+CS001+2023_LM",
+            "sections": [
+                {
+                    "section_key": "course_info",
+                    "section_display_name": "Course Info",
+                    "access": {
+                        "admin": true,
+                        "instructor": true,
+                        "finance_admin": false,
+                        "sales_admin": false,
+                        "staff": true,
+                        "forum_admin": false,
+                        "data_researcher": true
+                    },
+                    "course_id": "course-v1:LM+CS001+2023_LM",
+                    "course_display_name": "Empty",
+                    "course_org": "LM",
+                    "course_number": "CS001",
+                    "has_started": false,
+                    "has_ended": false,
+                    "start_date": "01-01-2030",
+                    "end_date": null,
+                    "num_sections": 5,
+                    "list_instructor_tasks_url": "/courses/course-v1:LM+CS001+2023_LM/instructor/api/list_instructor_tasks",
+                    "enrollment_count": {
+                        "audit": 3,
+                        "total": 3
+                    },
+                    "grade_cutoffs": "Pass: 0.5",
+                    "course_errors": [{
+
+                        "type": "Empty",
+                        "types": "Demo_course3"
+
+                    }]
+                }
+            ],
+            "certificate_allowlist": [],
+            "certificate_invalidations": []
+        }
+,
+        {
+            "studio_url": "//studio.tutor.bhbazar.com/course/course-v1:LM+CS001+2023_LM",
+            "sections": [
+                {
+                    "section_key": "course_info",
+                    "section_display_name": "Course Info",
+                    "access": {
+                        "admin": true,
+                        "instructor": true,
+                        "finance_admin": false,
+                        "sales_admin": false,
+                        "staff": true,
+                        "forum_admin": false,
+                        "data_researcher": true
+                    },
+                    "course_id": "course-v1:LM+CS001+2023_LM",
+                    "course_display_name": "Empty",
+                    "course_org": "LM",
+                    "course_number": "CS001",
+                    "has_started": false,
+                    "has_ended": false,
+                    "start_date": "01-01-2030",
+                    "end_date": null,
+                    "num_sections": 5,
+                    "list_instructor_tasks_url": "/courses/course-v1:LM+CS001+2023_LM/instructor/api/list_instructor_tasks",
+                    "enrollment_count": {
+                        "audit": 3,
+                        "total": 3
+                    },
+                    "grade_cutoffs": "Pass: 0.5",
+                    "course_errors": [{
+
+                        "type": "Empty",
+                        "types": "Demo_course3"
+
+                    }]
+                }
+            ],
+            "certificate_allowlist": [],
+            "certificate_invalidations": []
+        }
+,
+        {
+            "studio_url": "//studio.tutor.bhbazar.com/course/course-v1:LM+CS001+2023_LM",
+            "sections": [
+                {
+                    "section_key": "course_info",
+                    "section_display_name": "Course Info",
+                    "access": {
+                        "admin": true,
+                        "instructor": true,
+                        "finance_admin": false,
+                        "sales_admin": false,
+                        "staff": true,
+                        "forum_admin": false,
+                        "data_researcher": true
+                    },
+                    "course_id": "course-v1:LM+CS001+2023_LM",
+                    "course_display_name": "Empty",
+                    "course_org": "LM",
+                    "course_number": "CS001",
+                    "has_started": false,
+                    "has_ended": false,
+                    "start_date": "01-01-2030",
+                    "end_date": null,
+                    "num_sections": 5,
+                    "list_instructor_tasks_url": "/courses/course-v1:LM+CS001+2023_LM/instructor/api/list_instructor_tasks",
+                    "enrollment_count": {
+                        "audit": 3,
+                        "total": 3
+                    },
+                    "grade_cutoffs": "Pass: 0.5",
+                    "course_errors": [{
+
+                        "type": "Empty",
+                        "types": "Demo_course3"
+
+                    }]
+                }
+            ],
+            "certificate_allowlist": [],
+            "certificate_invalidations": []
+        }
+
+
+    ]
+}
+
