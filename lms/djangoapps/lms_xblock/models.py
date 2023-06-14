@@ -43,7 +43,7 @@ class StaffGradedSubmissions(models.Model):
     direct_link = models.URLField(db_column= "direct_link",help_text="Direct link to the assignment",max_length=300,blank=True)
     teacher_id = models.CharField(db_column= "teacher_id", help_text="One/Multiple TeacherIds for respective course",max_length=300)
     student_username = models.CharField(db_column= "student_username",help_text="student username,taken as str to allow dummy emails",max_length=200)
-    submitted_at = models.DateTimeField(db_column= "submitted_at",auto_now_add=True,default=datetime.now(), blank=True)
+    submitted_at = models.DateTimeField(db_column= "submitted_at",auto_now_add=True,blank=True)
     marked_as_read = models.BooleanField(db_column= "marked_as_read",default=False,blank=True)
     
     class Meta:
