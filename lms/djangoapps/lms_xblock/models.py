@@ -12,7 +12,7 @@ from django.db.models import TextField
 from xblock.core import XBlockAside
 from django.db import models
 from django.contrib.auth.models import User
-
+from datetime import datetime
 
 class XBlockAsidesConfig(ConfigurationModel):
     """
@@ -38,14 +38,14 @@ class XBlockAsidesConfig(ConfigurationModel):
     
 
 class StaffGradedSubmissions(models.Model):
+    course_name = models.CharField(db_column= "course_name",help_text="Name of the course",default="",max_length=300)
     assignment_name = models.CharField(db_column= "assignment_name",help_text="Name of the assignment",default="",max_length=300)
     direct_link = models.URLField(db_column= "direct_link",help_text="Direct link to the assignment",max_length=300,blank=True)
-    student_id = models.ForeignKey(User,help_text="Student Id,PK of auth_user", db_column="student_id", on_delete=models.CASCADE)
-    student_email = models.CharField(db_column= "student_email",help_text="Email Id for student,taken as str to allow dummy emails",max_length=200)
-    submitted_at = models.DateTimeField(db_column= "submitted_at",auto_now_add=True)
-    marked_as_read = models.BooleanField(db_column= "marked_as_read",default=False)
+    teacher_id = models.CharField(db_column= "teacher_id", help_text="One/Multiple TeacherIds for respective course",max_length=300)
+    student_username = models.CharField(db_column= "student_username",help_text="student username,taken as str to allow dummy emails",max_length=200)
+    submitted_at = models.DateTimeField(db_column= "submitted_at",auto_now_add=True,default=datetime.now(), blank=True)
+    marked_as_read = models.BooleanField(db_column= "marked_as_read",default=False,blank=True)
     
     class Meta:
         app_label = "lms_xblock"
         ordering = ['-submitted_at']
-        # db_table = "staffgradedsubmissions"

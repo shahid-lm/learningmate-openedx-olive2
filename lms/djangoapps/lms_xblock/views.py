@@ -9,9 +9,10 @@ from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthenticat
 from edx_rest_framework_extensions.auth.session.authentication import SessionAuthenticationAllowInactiveUser
 from openedx.core.lib.api.authentication import BearerAuthenticationAllowInactiveUser
 from . import serializers,models
+import json
 
 
-class StaffGradedSubmissionsView(ListAPIView):
+class StaffGradedSubmissionsView(APIView):
     """
         Get all staff graded assignment submissions that are unreads
     """
@@ -21,16 +22,20 @@ class StaffGradedSubmissionsView(ListAPIView):
         SessionAuthenticationAllowInactiveUser,
     )
     permission_classes = (IsAuthenticated,)
-    queryset = models.StaffGradedSubmissions.objects.filter(marked_as_read=False).all()
-    serializer_class = serializers.StaffGradedSubmissionsSerializer
     
-    # def perform_create(self, serializer):
-    #     user = get_object_or_404(User, id=self.request.data.get('user_id'))
-    #     return serializer.save(student_id=user)
+    http_method_names = ['get'] 
+    
+    def get(self, request, *args, **kwargs):
+        try:
+            all_notification_data = [entry for entry in list(models.StaffGradedSubmissions.objects.all().values()) 
+                           if request.user.id in json.loads(entry["teacher_id"])]
+            return Response({"all_notifications" : all_notification_data}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error" : str(e)}, status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 class DeleteStaffGradedSubmissions(APIView):
     """
-        Delete a marked as read submission
+        Delete a marked as read SGA submission
     """
     
     authentication_classes = (
@@ -40,13 +45,15 @@ class DeleteStaffGradedSubmissions(APIView):
     )
     permission_classes = (IsAuthenticated,)
     
+    http_method_names = ['delete'] 
+    
     def delete(self, request, id=None):
         try:
             submission = models.StaffGradedSubmissions.objects.filter(id=id)
             if submission.exists():
                 submission.delete()
                 return Response({"message" : "Deleted "},status=status.HTTP_204_NO_CONTENT)
-            return Response({'message' : 'no course found'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message' : 'no course found'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            return Response({'message' : str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message' : str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
