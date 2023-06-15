@@ -1,36 +1,34 @@
-var main = function() {
-    $('.notification img').on('click',function() {
-      $('.notification-menu').toggle();
-      $('.notification-badge').hide();
-    });
-
-    // ajax call to get list of notification
-    function checkNewMessages(){
-      return $.ajax({
-          url: `${window.location.origin}/api/sga/sgasubmission`,
-          type: 'GET',
-          cache: false,
-      });
-    }
-
-    //Checking for new messages every 5 seconds
-    setInterval(checkNewMessages(5000));
-
-    checkNewMessages().success(function (data) {
-      console.log(`data.data - ${JSON.stringify(data.data)}`);
-      console.log(`data.data - ${JSON.stringify(data)}`);
-      if(data.success) {
-        $.each(data.data.all_notifications, function (index, value) {
-          $('.notification-badge').html(`${value.length}`);
-          $('.notification-menu').append(` \
-          <li id='menu-item-${index+1}'> \
+$(document).ready(function () {
+  // ajax call to get list of notification
+  function checkNewMessages() {
+    return $.ajax({
+      url: `${window.location.origin}/api/sga/sgasubmission`,
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      type: "GET",
+      cache: false,
+      success: function (data) {
+        $(".notification-badge").html(`${data.all_notifications.length}`);
+        $("ul").empty();
+        $.each(data.all_notifications, function (index, value) {
+          $(".notification-menu").append(` \
+          <li class='menu-item-${value.id}'> \
             <img class="avatar" src="../static/images/letter.png" alt="avatar"> \
-            <h3>Assignment ${value.assignment_name} submitted by ${value.student_username} for course ${value.course_name}</h3> \
+            <h3>New submission for course ${value.course_name} | assignment ${value.assignment_name} submitted by ${value.student_username}</h3> \
             <p><button class="btn-mark-as-read">mark as read</button></p> \
           </li>`);
         });
-      }
-    }
-    );
-}
-$(document).ready(main);
+      },
+      error: function (xhr, status, error) {
+        alert("Error!" + xhr.status);
+      },
+    });
+  }
+  setInterval(checkNewMessages(), 60000);
+
+  // Dropdown menu actions
+  $(".notification img").on("click", function () {
+    $(".notification-menu").toggle();
+    $(".notification-badge").hide();
+  });
+});
