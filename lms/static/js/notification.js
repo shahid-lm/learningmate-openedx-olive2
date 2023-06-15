@@ -14,7 +14,7 @@ var main = function() {
     }
 
     //Checking for new messages every 5 seconds
-    setInterval(checkNewMessages(totalMessages,5000));
+    setInterval(checkNewMessages(5000));
 
     checkNewMessages().success(function (data) {
       console.log(`data.data - ${JSON.stringify(data.data)}`);
