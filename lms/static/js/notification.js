@@ -8,23 +8,29 @@ $(document).ready(function () {
       type: "GET",
       cache: false,
       success: function (data) {
-        $(".notification-badge").html(`${data.all_notifications.length}`);
-        $(".notification-menu").empty();
-        $.each(data.all_notifications, function (index, value) {
-          $(".notification-menu").append(` \
-          <li class='menu-item-${value.id}'> \
-            <img class="avatar" src="../static/images/letter.png" alt="avatar"> \
-            <h3>New submission for course ${value.course_name} | assignment ${value.assignment_name} submitted by ${value.student_username}</h3> \
-            <p><button class="btn-mark-as-read">mark as read</button></p> \
-          </li>`);
-        });
+        if (data.all_notifications.length > 0) {
+          $(".notification-badge").html(`${data.all_notifications.length}`);
+          $(".notification-menu").empty();
+          $.each(data.all_notifications, function (index, value) {
+            $(".notification-menu").append(` \
+            <li class='menu-item-${value.id}'> \
+              <img class="avatar" src="../static/images/letter.png" alt="avatar"> \
+              New submission for course <h3>[${value.course_name}]</h3> assignment name <h3>[${value.assignment_name}]</h3> submitted by <h3>[${value.student_username}]</h3> \
+              <p><button class="btn-mark-as-read">mark as read</button></p> \
+            </li>`);
+          });
+        }
+        else {
+          $(".notification-badge").hide();
+        }
+        
       },
       error: function (xhr, status, error) {
         alert("Error!" + xhr.status);
       },
     });
   }
-  setInterval(checkNewMessages(), 60000);
+  setInterval(function(){checkNewMessages()}, 60000);
 
   // Dropdown menu actions
   $(".notification img").on("click", function () {
