@@ -268,7 +268,9 @@
             top: 55px;
             z-index: 10;
             overflow-y: scroll;
+            overflow-x: scroll;
             height: 200px;
+            width: 400px;
             box-shadow:
                 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
                 0 6.7px 5.3px rgba(0, 0, 0, 0.048),
@@ -279,7 +281,7 @@
 
             li {
               cursor: pointer;
-              // overflow: hidden;
+              overflow: hidden;
               padding: 0;
   
               &:hover {

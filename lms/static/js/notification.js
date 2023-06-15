@@ -9,7 +9,7 @@ $(document).ready(function () {
       cache: false,
       success: function (data) {
         $(".notification-badge").html(`${data.all_notifications.length}`);
-        $("ul").empty();
+        $(".notification-menu").empty();
         $.each(data.all_notifications, function (index, value) {
           $(".notification-menu").append(` \
           <li class='menu-item-${value.id}'> \
