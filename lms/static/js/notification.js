@@ -19,7 +19,7 @@ $(document).ready(function () {
             $(".notification-menu").empty();
             $.each(data.all_notifications, function (index, value) {
               $(".notification-menu").append(` \
-            <li class='menu-item-${value.id}'> \
+            <li id='menu-item-${value.id}' class='notification-menu-item'> \
               <img class="avatar" src="../static/images/letter.png" alt="avatar"> \
               New submission from [${value.student_username}] for course [${value.course_name}]  \
               <p><button class="btn-mark-as-read">mark as read</button></p> \
@@ -27,10 +27,11 @@ $(document).ready(function () {
             });
           } else {
             $(".notification-badge").hide();
+            $(".notification-menu").empty();
           }
         },
         error: function (xhr, status, error) {
-          alert("Error!" + xhr.status);
+          console.log(`Error!! ${err.Message}`);
         },
       });
     }
@@ -42,6 +43,25 @@ $(document).ready(function () {
     $(".notification img").on("click", function () {
       $(".notification-menu").toggle();
       $(".notification-badge").hide();
+    });
+
+    // Delete mark as read notfications
+    $(".notification-menu").on("click", "li button", (event) => {
+      $(event.target).closest("li").remove();
+      var notificationId = parseInt($(event.target).closest("li").attr("id"));
+      $.ajax({
+        url: `${window.location.origin}/api/sga/delete_sgasubmission/${notificationId}`,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        type: "POST",
+        cache: false,
+        success: function (data) {
+          console.log(`Deleted notification ${notificationId}`);
+        },
+        error: function (xhr, status, error) {
+          console.log(`Error!! ${err.Message}`);
+        },
+      });
     });
   } catch (err) {
     console.log(err.message);
