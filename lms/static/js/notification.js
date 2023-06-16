@@ -35,6 +35,7 @@ $(document).ready(function () {
         },
       });
     }
+    // call every 15 seconds
     setInterval(function () {
       checkNewNotifications();
     }, 15000);
@@ -47,8 +48,11 @@ $(document).ready(function () {
 
     // Delete mark as read notfications
     $(".notification-menu").on("click", "li button", (event) => {
+      // remove mark-as-read element from DOM
       $(event.target).closest("li").remove();
-      var notificationId = parseInt($(event.target).closest("li").attr("id"));
+      // remove mark-as-read notification from openedx database
+      const selectedElementId = $(event.target.closest("li")).attr("id");
+      const notificationId = parseInt(selectedElementId.slice(-1));
       $.ajax({
         url: `${window.location.origin}/api/sga/delete_sgasubmission/${notificationId}`,
         contentType: "application/json; charset=utf-8",
