@@ -63,7 +63,7 @@ $(document).ready(function () {
           console.log(`Deleted notification ${notificationId}`);
         },
         error: function (xhr, status, error) {
-          console.log(`Error!! ${err.Message}`);
+          console.log(`Error!! ${error.Message}`);
         },
       });
     });
