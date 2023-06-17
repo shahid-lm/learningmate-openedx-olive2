@@ -57,13 +57,13 @@ $(document).ready(function () {
         url: `${window.location.origin}/api/sga/delete_sgasubmission/${notificationId}`,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        type: "POST",
+        type: "DELETE",
         cache: false,
         success: function (data) {
           console.log(`Deleted notification ${notificationId}`);
         },
         error: function (xhr, status, error) {
-          console.log(`Error!! ${error.Message}`);
+          console.log(`Error!! ${xhr.responseText}`);
         },
       });
     });
