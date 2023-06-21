@@ -23,8 +23,8 @@ $(document).ready(function () {
               <a href=${value.direct_link} target="_blank">
               <img class="avatar" src="../static/images/letter.png" alt="avatar"> \
               New submission from [${value.student_username}] for course [${value.course_name}]  \
-              <p><button class="btn-mark-as-read">mark as read</button></p> \
               </a>
+              <p><button class="btn-mark-as-read">mark as read</button></p> \
             </li>`);
             });
           } else {
