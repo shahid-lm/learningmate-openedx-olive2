@@ -99,7 +99,8 @@ from ..course_group_config import (
 )
 from ..course_info_model import delete_course_update, get_course_updates, update_course_updates
 from ..courseware_index import CoursewareSearchIndexer, SearchIndexingError
-from ..tasks import rerun_course as rerun_course_task,create_course_components
+from ..tasks import rerun_course as rerun_course_task
+from .tasks import create_course_components
 from ..toggles import split_library_view_on_dashboard
 from ..utils import (
     add_instructor,
