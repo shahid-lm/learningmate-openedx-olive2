@@ -66,9 +66,9 @@ from xmodule.modulestore.xml_exporter import export_course_to_xml, export_librar
 from xmodule.modulestore.xml_importer import CourseImportException, import_course_from_xml, import_library_from_xml  # lint-amnesty, pylint: disable=wrong-import-order
 
 from opaque_keys.edx.keys import CourseKey, UsageKey
-from cms.djangoapps.contentstore.views.helpers import create_xblock
+from views.helpers import create_xblock
 from xmodule.modulestore.django import modulestore
-from cms.djangoapps.models.settings.course_metadata import CourseMetadata
+from ..models.settings.course_metadata import CourseMetadata
 from django.utils.translation import gettext as _
 from typing import Union
 
