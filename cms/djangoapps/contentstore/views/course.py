@@ -82,7 +82,6 @@ from xmodule.modulestore.exceptions import DuplicateCourseError, ItemNotFoundErr
 from xmodule.partitions.partitions import UserPartition  # lint-amnesty, pylint: disable=wrong-import-order
 from xmodule.tabs import CourseTab, CourseTabList, InvalidTabsException  # lint-amnesty, pylint: disable=wrong-import-order
 from openedx.core.lib.api.authentication import BearerAuthenticationAllowInactiveUser,BearerAuthentication
-from ..tasks import create_course_components
 from rest_framework.authentication import SessionAuthentication
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
 from edx_rest_framework_extensions.auth.session.authentication import SessionAuthenticationAllowInactiveUser
@@ -100,7 +99,7 @@ from ..course_group_config import (
 )
 from ..course_info_model import delete_course_update, get_course_updates, update_course_updates
 from ..courseware_index import CoursewareSearchIndexer, SearchIndexingError
-from ..tasks import rerun_course as rerun_course_task
+from ..tasks import rerun_course as rerun_course_task,create_course_components
 from ..toggles import split_library_view_on_dashboard
 from ..utils import (
     add_instructor,
