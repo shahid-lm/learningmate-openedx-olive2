@@ -82,7 +82,7 @@ from xmodule.modulestore.exceptions import DuplicateCourseError, ItemNotFoundErr
 from xmodule.partitions.partitions import UserPartition  # lint-amnesty, pylint: disable=wrong-import-order
 from xmodule.tabs import CourseTab, CourseTabList, InvalidTabsException  # lint-amnesty, pylint: disable=wrong-import-order
 from openedx.core.lib.api.authentication import BearerAuthenticationAllowInactiveUser,BearerAuthentication
-from cms.djangoapps.contentstore.tasks import create_course_components
+from ..tasks import create_course_components
 from rest_framework.authentication import SessionAuthentication
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
 from edx_rest_framework_extensions.auth.session.authentication import SessionAuthenticationAllowInactiveUser
