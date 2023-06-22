@@ -138,7 +138,8 @@ __all__ = ['course_info_handler', 'course_handler', 'course_listing',
            'textbooks_list_handler', 'textbooks_detail_handler',
            'group_configurations_list_handler', 'group_configurations_detail_handler',
            'get_course_and_check_access',
-           'course_crud_apis']
+           'create_course_cms',
+           'create_course_content_cms']
 
 WAFFLE_NAMESPACE = 'studio_home'
 ENABLE_GLOBAL_STAFF_OPTIMIZATION = WaffleSwitch(  # lint-amnesty, pylint: disable=toggle-missing-annotation
