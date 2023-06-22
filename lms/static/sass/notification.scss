@@ -1,0 +1,72 @@
+
+
+// .notification {
+//     // position: relative;
+//     text-align: right;
+//     cursor: pointer;
+
+//     img {
+//         padding: 10px 0;
+//         }
+//     .notification-badge {
+//             position: relative;
+//             top: -10px;
+//             left: -10px;
+//             padding: 3px 9px;
+//             border-radius: 50%;
+//             background: red;
+//             color: white;
+//         }
+    
+// }
+
+// .notification-menu {
+//     position: absolute;
+//     top: 50px;
+//     right: 10px;
+//     background-color: #e5e5e5;
+//     border: 1px solid #989898;
+//     border-radius: 5px;
+//     padding: 5px;
+//     list-style: none;
+//     width: 250px;
+//     display: none;
+//     text-align: left;
+//     overflow-y: scroll;
+//     height: 200px;
+//     // box-shadow: 0 3px 15px rgb(0 0 0 / 0.2); /*[horizontal offset] [vertical offset] [blur radius] [optional spread radius] [color];*/
+//     box-shadow:
+//         0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+//         0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+//         0 12.5px 10px rgba(0, 0, 0, 0.06),
+//         0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+//         0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+//         0 100px 80px rgba(0, 0, 0, 0.12)
+//     ;
+
+//     li {
+//         background-color: #fff;
+//         padding: 10px;
+//         margin-bottom: 10px;
+//         border-radius: 5px;
+//         &:hover {
+//             color: theme-color("dark");
+//             background-color: theme-color("light");
+//         }
+//     }
+
+//     .avatar {
+//         padding: 2px 0;
+//     }
+
+//     h3 {
+//         font-size: 15px;
+//         margin: 0 0 5px 0;
+//         display: inline;
+//     }
+
+//     p {
+//         margin-bottom: 0;
+//         font-size: 14px;
+//     }
+// }

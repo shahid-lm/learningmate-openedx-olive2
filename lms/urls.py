@@ -207,6 +207,9 @@ urlpatterns = [
     ),
     path('api/discounts/', include(('openedx.features.discounts.urls', 'openedx.features.discounts'),
                                    namespace='api_discounts')),
+    
+    path('api/sga/', include('lms.djangoapps.lms_xblock.urls')),
+    
     path('403', handler403),
     path('404', handler404),
     path('429', handler429),
