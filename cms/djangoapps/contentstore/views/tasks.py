@@ -4,7 +4,7 @@ from xmodule.modulestore.django import modulestore
 from cms.djangoapps.models.settings.course_metadata import CourseMetadata
 # from models.settings.course_metadata import CourseMetadata
 from django.utils.translation import gettext as _
-from typing import Union
+from typing import Union,List,Dict
 from celery.utils.log import get_task_logger
 from celery import shared_task
 
@@ -60,7 +60,7 @@ outline_params_mappings = {
 }
         
 @shared_task
-def create_course_components(user : object, course_key_string : str, structure_metadata : list[dict]):
+def create_course_components(user : object, course_key_string : str, structure_metadata : List[Dict]):
     try:
         LOGGER.info('######### Attempting to create course components #############')
         course_key = CourseKey.from_string(course_key_string)
