@@ -82,6 +82,7 @@ from xmodule.modulestore.exceptions import DuplicateCourseError, ItemNotFoundErr
 from xmodule.partitions.partitions import UserPartition  # lint-amnesty, pylint: disable=wrong-import-order
 from xmodule.tabs import CourseTab, CourseTabList, InvalidTabsException  # lint-amnesty, pylint: disable=wrong-import-order
 from openedx.core.lib.api.authentication import BearerAuthenticationAllowInactiveUser,BearerAuthentication
+from cms.djangoapps.contentstore.tasks import create_course_components
 from rest_framework.authentication import SessionAuthentication
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
 from edx_rest_framework_extensions.auth.session.authentication import SessionAuthenticationAllowInactiveUser
@@ -1926,7 +1927,7 @@ def _get_course_creator_status(user):
                          JwtAuthentication,
                          SessionAuthenticationAllowInactiveUser
                          ))
-def course_crud_apis(request):
+def create_course_cms(request):
     """
         Method 'POST' (Create a new course API): 
             Payload Example : {
@@ -1988,3 +1989,22 @@ def course_crud_apis(request):
                     {'error': f'{str(e)}'},
                     status=status.HTTP_400_BAD_REQUEST
                 )
+        
+@api_view(['POST'])
+@authentication_classes((BearerAuthenticationAllowInactiveUser ,
+                         JwtAuthentication,
+                         SessionAuthenticationAllowInactiveUser
+                         ))
+def create_course_content_cms(request, course_key_string):
+    """
+        API reponsible for creating course contents
+    """
+    try:
+        # call validation first here
+        structure_metadata = request.data.get("course_structure")
+        create_course_components.delay(request.user,course_key_string,structure_metadata)
+        return Response({"message" : "Course creation is in progress"}, status=status.HTTP_201_CREATED)
+    except KeyError:
+        return Response({"message" : "Exception - Request data must contain key 'course_structure'"}, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({"message" : f"Exception - {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
