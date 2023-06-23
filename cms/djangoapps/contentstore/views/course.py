@@ -2021,7 +2021,7 @@ def create_course_content_cms(request, course_key_string):
         except:
             return Response({"message" : "Exception - Incorrect 'org'"}, status=status.HTTP_400_BAD_REQUEST)
         try:
-            create_course_components.delay(user,course_key_string,structure_metadata)
+            create_course_components.delay(request,course_key_string,structure_metadata)
         except:
             return Response({"message" : "Exception - Got error in create_course_components"}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"message" : "Course creation is in progress"}, status=status.HTTP_201_CREATED)

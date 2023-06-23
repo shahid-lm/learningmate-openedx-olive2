@@ -60,9 +60,10 @@ outline_params_mappings = {
 }
         
 @shared_task
-def create_course_components(user : object, course_key_string : str, structure_metadata : List[Dict]):
+def create_course_components(request, course_key_string : str, structure_metadata : List[Dict]):
     try:
         LOGGER.info('######### Attempting to create course components #############')
+        user = request.user
         course_key = CourseKey.from_string(course_key_string)
         for data in structure_metadata:
             if data["type"] == "section":
