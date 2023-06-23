@@ -85,6 +85,8 @@ from openedx.core.lib.api.authentication import BearerAuthenticationAllowInactiv
 from rest_framework.authentication import SessionAuthentication
 from edx_rest_framework_extensions.auth.jwt.authentication import JwtAuthentication
 from edx_rest_framework_extensions.auth.session.authentication import SessionAuthenticationAllowInactiveUser
+from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
@@ -1996,14 +1998,31 @@ def create_course_cms(request):
                          JwtAuthentication,
                          SessionAuthenticationAllowInactiveUser
                          ))
-def create_course_content_cms(request, course_key_string):
+def create_course_content_cms(request, org, course_key_string):
     """
         API reponsible for creating course contents
     """
     try:
         # call validation first here
         structure_metadata = request.data.get("course_structure")
-        create_course_components.delay(request.user,course_key_string,structure_metadata)
+        try:
+            user = User.objects.get(id=request.user.id)
+        except ObjectDoesNotExist:
+            return Response({"message" : "Exception - User not registered"}, status=status.HTTP_400_BAD_REQUEST)
+        # validation if user has course creator access
+        try:
+            has_course_creator_role = is_content_creator(request.user, org)
+            if not has_course_creator_role:
+                return Response(
+                    {'error': 'User doesn\'t have course create permission'},
+                    status=status.HTTP_409_CONFLICT
+                )
+        except:
+            return Response({"message" : "Exception - Incorrect 'org'"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            create_course_components.delay(user,course_key_string,structure_metadata)
+        except:
+            return Response({"message" : "Exception - Got error in create_course_components"}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"message" : "Course creation is in progress"}, status=status.HTTP_201_CREATED)
     except KeyError:
         return Response({"message" : "Exception - Request data must contain key 'course_structure'"}, status=status.HTTP_400_BAD_REQUEST)

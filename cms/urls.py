@@ -108,7 +108,7 @@ urlpatterns = oauth2_urlpatterns + [
             ),
     re_path(fr'^course/{settings.COURSE_KEY_PATTERN}?$', contentstore_views.course_handler, name='course_handler'),
     re_path('api/create_course_cms/', contentstore_views.create_course_cms, name='create_course_cms'),
-    re_path(fr'api/create_course_content_cms/{settings.COURSE_KEY_PATTERN}?$', contentstore_views.create_course_content_cms, name='create_course_content_cms'),
+    re_path(fr'api/create_course_content_cms/<str:org>/{settings.COURSE_KEY_PATTERN}?$', contentstore_views.create_course_content_cms, name='create_course_content_cms'),
 
     re_path(fr'^checklists/{settings.COURSE_KEY_PATTERN}?$',
             contentstore_views.checklists_handler,
