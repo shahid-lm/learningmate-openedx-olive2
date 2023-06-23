@@ -1998,13 +1998,14 @@ def create_course_cms(request):
                          JwtAuthentication,
                          SessionAuthenticationAllowInactiveUser
                          ))
-def create_course_content_cms(request, org, course_key_string):
+def create_course_content_cms(request, course_key_string):
     """
         API reponsible for creating course contents
     """
     try:
         # call validation first here
         structure_metadata = request.data.get("course_structure")
+        org = request.data.get("org")
         try:
             user = User.objects.get(id=request.user.id)
         except ObjectDoesNotExist:
