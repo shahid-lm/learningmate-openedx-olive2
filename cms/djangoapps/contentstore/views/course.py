@@ -2006,10 +2006,7 @@ def create_course_content_cms(request, course_key_string):
         # call validation first here
         structure_metadata = request.data.get("course_structure")
         org = request.data.get("org")
-        try:
-            user = User.objects.get(id=request.user.id)
-        except ObjectDoesNotExist:
-            return Response({"message" : "Exception - User not registered"}, status=status.HTTP_400_BAD_REQUEST)
+        
         # validation if user has course creator access
         try:
             has_course_creator_role = is_content_creator(request.user, org)
@@ -2021,7 +2018,8 @@ def create_course_content_cms(request, course_key_string):
         except:
             return Response({"message" : "Exception - Incorrect 'org'"}, status=status.HTTP_400_BAD_REQUEST)
         try:
-            create_course_components.delay(request,course_key_string,structure_metadata)
+            user_id = request.user.id
+            create_course_components.delay(user_id,course_key_string,structure_metadata)
         except:
             return Response({"message" : "Exception - Got error in create_course_components"}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"message" : "Course creation is in progress"}, status=status.HTTP_201_CREATED)
