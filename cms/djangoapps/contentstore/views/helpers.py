@@ -297,7 +297,7 @@ def is_content_creator(user, org):
     """
     return (auth.user_has_role(user, CourseCreatorRole()) or
             auth.user_has_role(user, OrgContentCreatorRole(org=org)))
-    
+
 def validate_schema(all_data : list) -> str:
     """Validates schema for course structure
 
@@ -424,7 +424,7 @@ def validate_schema(all_data : list) -> str:
                                                     "type": "string"
                                                     }
                                                 }
-                                                
+
                                                 }
                                             },
 
@@ -484,7 +484,7 @@ def validate_schema(all_data : list) -> str:
             }
         }
     try:
-        validate(instance=all_data, schema=schemas)
+        validate(instance=all_data[0], schema=schemas)
         return ""
     except ValidationError as validerr:
         return str(validerr.message)
