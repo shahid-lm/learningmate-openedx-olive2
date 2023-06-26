@@ -19,6 +19,7 @@ from common.djangoapps.student.roles import CourseCreatorRole, OrgContentCreator
 from openedx.core.toggles import ENTRANCE_EXAMS
 
 from ..utils import reverse_course_url, reverse_library_url, reverse_usage_url
+from jsonschema import validate,ValidationError
 
 __all__ = ['event']
 
@@ -296,3 +297,194 @@ def is_content_creator(user, org):
     """
     return (auth.user_has_role(user, CourseCreatorRole()) or
             auth.user_has_role(user, OrgContentCreatorRole(org=org)))
+    
+def validate_schema(all_data : list) -> str:
+    """Validates schema for course structure
+
+    Args:
+        all_data (list): course stuctures as a list of dictionary
+    """
+    schemas={
+            "$schema": "http://json-schema.org/draft-04/schema#",
+            "type": "object",
+            "properties": {
+                "course_structure": {
+                "type": "array",
+                "maxItems": 100,
+                "items": #[
+                    {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                        "type": ["string"],
+                        "enum": ["section"],
+                        },
+                        "display_name": {
+                        "type": "string"
+                        },
+                        "data": {
+                        "type": "array",
+                        "maxItems": 100,
+                        "items": #[
+                            {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                "type": ["string"],
+                                "enum": ["subsection"],
+                                },
+                                "display_name": {
+                                "type": "string"
+                                },
+                                "data": {
+                                "type": "array",
+                                "maxItems": 100,
+
+                                "items":
+                                    {
+                                    "type": "object",
+                                    "properties": {
+                                        "type": {
+                                        "type": "string",
+                                        "enum": ["unit"]
+                                        },
+                                        "display_name": {
+                                        "type": "string"
+                                        },
+                                        "data": {
+                                        "type": "array",
+
+                                        "items": [
+                                            {
+                                            "type": "object",
+                                            "properties": {
+                                                "type": {
+                                                "type": ["string"],
+                                                "enum": ["video"],
+                                                },
+                                                "display_name": {
+                                                "type": "string"
+                                                },
+                                                "data": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "license": {
+                                                    "type": "null"
+                                                    },
+                                                    "display_name": {
+                                                    "type": "string"
+                                                    },
+                                                    "download_track": {
+                                                    "type": "string"
+                                                    },
+                                                    "download_video": {
+                                                    "type": "boolean"
+                                                    },
+                                                    "edx_video_id": {
+                                                    "type": "string"
+                                                    },
+                                                    "end_time": {
+                                                    "type": "string"
+                                                    },
+                                                    "handout": {
+                                                    "type": "null"
+                                                    },
+                                                    "html5_sources": {
+                                                    "type": "array",
+                                                    "items": {}
+                                                    },
+                                                    "only_on_web": {
+                                                    "type": "boolean"
+                                                    },
+                                                    "public_access": {
+                                                    "type": "boolean"
+                                                    },
+                                                    "show_captions": {
+                                                    "type": "boolean"
+                                                    },
+                                                    "start_time": {
+                                                    "type": "string"
+                                                    },
+                                                    "track": {
+                                                    "type": "string"
+                                                    },
+                                                    "transcripts": {
+                                                    "type": "object"
+                                                    },
+                                                    "youtube_id_0_75": {
+                                                    "type": "string"
+                                                    },
+                                                    "youtube_id_1_0": {
+                                                    "type": "string"
+                                                    },
+                                                    "youtube_id_1_25": {
+                                                    "type": "string"
+                                                    },
+                                                    "youtube_id_1_5": {
+                                                    "type": "string"
+                                                    }
+                                                }
+                                                
+                                                }
+                                            },
+
+                                            },
+                                            {
+                                            "type": "object",
+                                            "properties": {
+                                                "type": {
+                                                "type": "string",
+                                                "enum": ["text"],
+                                                },
+                                                "display_name": {
+                                                "type": "string"
+                                                },
+                                                "data": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "data": {
+                                                    "type": "string"
+                                                    }
+                                                },
+
+                                                }
+                                            },
+
+                                            }
+                                        ]
+
+                                        }
+                                    },
+                                    "required": [
+                                        "type",
+                                        "display_name",
+                                        "data"
+                                    ]
+                                    }
+
+                                }
+                            },
+                            "required": [
+                                "type",
+                                "display_name",
+                                "data"
+                            ]
+                            }
+
+                        }
+                    },
+                    "required": [
+                        "type",
+                        "display_name",
+                        "data"
+                    ]
+                    }
+
+                }
+            }
+        }
+    try:
+        validate(instance=all_data, schema=schemas)
+        return ""
+    except ValidationError as validerr:
+        return str(validerr.message)
