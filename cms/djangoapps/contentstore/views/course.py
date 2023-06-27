@@ -2005,9 +2005,11 @@ def create_course_content_cms(request, course_key_string):
     try:
         structure_metadata = request.data.get("course_structure")
         org = request.data.get("org")
+        log.info(f'#################### structure_metadata - {type(structure_metadata)}')
         # validation for input course structure
-        if validation_error:=validate_schema(structure_metadata):
-            return Response({"message" : "Exception - Provided course structure isn't valid", "exception" : f"{validation_error}"}, status=status.HTTP_400_BAD_REQUEST)
+        for each_sections in structure_metadata:
+            if validation_error:=validate_schema(each_sections):
+                return Response({"message" : "Exception - Provided course structure isn't valid", "exception" : f"{validation_error}"}, status=status.HTTP_400_BAD_REQUEST)
         # validation if user has course creator access
         try:
             has_course_creator_role = is_content_creator(request.user, org)

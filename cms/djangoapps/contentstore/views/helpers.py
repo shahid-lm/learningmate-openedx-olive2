@@ -20,6 +20,9 @@ from openedx.core.toggles import ENTRANCE_EXAMS
 
 from ..utils import reverse_course_url, reverse_library_url, reverse_usage_url
 from jsonschema import validate,ValidationError
+import logging
+
+log = logging.getLogger(__name__)
 
 __all__ = ['event']
 
@@ -298,12 +301,13 @@ def is_content_creator(user, org):
     return (auth.user_has_role(user, CourseCreatorRole()) or
             auth.user_has_role(user, OrgContentCreatorRole(org=org)))
 
-def validate_schema(all_data : list) -> str:
+def validate_schema(all_data : dict) -> str:
     """Validates schema for course structure
 
     Args:
         all_data (list): course stuctures as a list of dictionary
     """
+    log.info("###################### Inside validate schema")
     schemas={
             "$schema": "http://json-schema.org/draft-04/schema#",
             "type": "object",
@@ -484,7 +488,11 @@ def validate_schema(all_data : list) -> str:
             }
         }
     try:
-        validate(instance=all_data[0], schema=schemas)
+        log.info(f"########################### {all_data}")
+        log.info(f"########################### {type(all_data)}")
+        validate(instance=all_data, schema=schemas)
         return ""
     except ValidationError as validerr:
         return str(validerr.message)
+    except Exception as e:
+        return str(e)
