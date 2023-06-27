@@ -308,185 +308,249 @@ def validate_schema(all_data : dict) -> str:
         all_data (list): course stuctures as a list of dictionary
     """
     log.info("###################### Inside validate schema")
-    schemas={
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "type": "object",
-            "properties": {
-                "course_structure": {
+    schemas = {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+            "org": {
+                "type": ["string"],
+
+            },
+            "course_structure": {
                 "type": "array",
                 "maxItems": 100,
-                "items": #[
+                "items":
                     {
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                        "type": ["string"],
-                        "enum": ["section"],
-                        },
-                        "display_name": {
-                        "type": "string"
-                        },
-                        "data": {
-                        "type": "array",
-                        "maxItems": 100,
-                        "items": #[
-                            {
-                            "type": "object",
-                            "properties": {
-                                "type": {
+                        "type": "object",
+                        "properties": {
+                            "type": {
                                 "type": ["string"],
-                                "enum": ["subsection"],
-                                },
-                                "display_name": {
+                                "enum": ["section"],
+                            },
+                            "display_name": {
                                 "type": "string"
-                                },
-                                "data": {
+                            },
+                            "data": {
                                 "type": "array",
                                 "maxItems": 100,
-
                                 "items":
                                     {
-                                    "type": "object",
-                                    "properties": {
-                                        "type": {
-                                        "type": "string",
-                                        "enum": ["unit"]
-                                        },
-                                        "display_name": {
-                                        "type": "string"
-                                        },
-                                        "data": {
-                                        "type": "array",
-
-                                        "items": [
-                                            {
-                                            "type": "object",
-                                            "properties": {
-                                                "type": {
+                                        "type": "object",
+                                        "properties": {
+                                            "type": {
                                                 "type": ["string"],
-                                                "enum": ["video"],
-                                                },
-                                                "display_name": {
+                                                "enum": ["subsection"],
+                                            },
+                                            "display_name": {
                                                 "type": "string"
-                                                },
-                                                "data": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "license": {
-                                                    "type": "null"
-                                                    },
-                                                    "display_name": {
-                                                    "type": "string"
-                                                    },
-                                                    "download_track": {
-                                                    "type": "string"
-                                                    },
-                                                    "download_video": {
-                                                    "type": "boolean"
-                                                    },
-                                                    "edx_video_id": {
-                                                    "type": "string"
-                                                    },
-                                                    "end_time": {
-                                                    "type": "string"
-                                                    },
-                                                    "handout": {
-                                                    "type": "null"
-                                                    },
-                                                    "html5_sources": {
-                                                    "type": "array",
-                                                    "items": {}
-                                                    },
-                                                    "only_on_web": {
-                                                    "type": "boolean"
-                                                    },
-                                                    "public_access": {
-                                                    "type": "boolean"
-                                                    },
-                                                    "show_captions": {
-                                                    "type": "boolean"
-                                                    },
-                                                    "start_time": {
-                                                    "type": "string"
-                                                    },
-                                                    "track": {
-                                                    "type": "string"
-                                                    },
-                                                    "transcripts": {
-                                                    "type": "object"
-                                                    },
-                                                    "youtube_id_0_75": {
-                                                    "type": "string"
-                                                    },
-                                                    "youtube_id_1_0": {
-                                                    "type": "string"
-                                                    },
-                                                    "youtube_id_1_25": {
-                                                    "type": "string"
-                                                    },
-                                                    "youtube_id_1_5": {
-                                                    "type": "string"
+                                            },
+                                            "data": {
+                                                "type": "array",
+                                                "maxItems": 100,
+
+                                                "items":
+                                                    {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "type": {
+                                                                "type": "string",
+                                                                "enum": ["unit"]
+                                                            },
+                                                            "display_name": {
+                                                                "type": "string"
+                                                            },
+                                                            "data": {
+                                                                "type": "array",
+
+                                                                "items": [
+                                                                    {
+                                                                        "type": "object",
+                                                                        "properties": {
+                                                                            "type": {
+                                                                                "type": ["string"],
+                                                                                "enum": ["video"],
+                                                                            },
+                                                                            "display_name": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "data": {
+                                                                                "type": "object",
+                                                                                "properties": {
+                                                                                    "license": {
+                                                                                        "type": "null"
+                                                                                    },
+                                                                                    "display_name": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "download_track": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "download_video": {
+                                                                                        "type": "boolean"
+                                                                                    },
+                                                                                    "edx_video_id": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "end_time": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "handout": {
+                                                                                        "type": "null"
+                                                                                    },
+                                                                                    "html5_sources": {
+                                                                                        "type": "array",
+                                                                                        "items": {}
+                                                                                    },
+                                                                                    "only_on_web": {
+                                                                                        "type": "boolean"
+                                                                                    },
+                                                                                    "public_access": {
+                                                                                        "type": "boolean"
+                                                                                    },
+                                                                                    "show_captions": {
+                                                                                        "type": "boolean"
+                                                                                    },
+                                                                                    "start_time": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "track": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "transcripts": {
+                                                                                        "type": "object"
+                                                                                    },
+                                                                                    "youtube_id_0_75": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "youtube_id_1_0": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "youtube_id_1_25": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "youtube_id_1_5": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                }
+
+                                                                            }
+                                                                        },
+                                                                    },
+                                                                    {
+                                                                        "type": "object",
+                                                                        "properties": {
+                                                                            "type": {
+                                                                                "type": "string",
+                                                                                "enum": ["text"],
+                                                                            },
+                                                                            "display_name": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "data": {
+                                                                                "type": "object",
+                                                                                "properties": {
+                                                                                    "data": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                            }
+                                                                        },
+
+                                                                    },
+                                                                    {
+                                                                        "type": "object",
+                                                                        "properties": {
+                                                                            "type": {
+                                                                                "type": "string",
+                                                                                "enum": ["problem"]
+                                                                            },
+                                                                            "display_name": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "data": {
+                                                                                "type": "object",
+                                                                                "properties": {
+                                                                                    "data": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "metadata": {
+                                                                                        "type": "object",
+                                                                                        "properties": {
+                                                                                            "markdown": {
+                                                                                                "type": "string"
+                                                                                            }
+                                                                                        },
+                                                                                        "required": [
+                                                                                            "markdown"
+                                                                                        ]
+                                                                                    },
+                                                                                    "attempts_before_showanswer_button": {
+                                                                                        "type": "integer"
+                                                                                    },
+                                                                                    "matlab_api_key": {
+                                                                                        "type": "null"
+                                                                                    },
+                                                                                    "max_attempts": {
+                                                                                        "type": "null"
+                                                                                    },
+                                                                                    "rerandomize": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "show_reset_button": {
+                                                                                        "type": "boolean"
+                                                                                    },
+                                                                                    "showanswer": {
+                                                                                        "type": "string"
+                                                                                    },
+                                                                                    "source_code": {
+                                                                                        "type": "null"
+                                                                                    },
+                                                                                    "submission_wait_seconds": {
+                                                                                        "type": "null"
+                                                                                    },
+                                                                                    "weight": {
+                                                                                        "type": "null"
+                                                                                    }
+                                                                                },
+                                                                            }
+                                                                        },
+                                                                    }
+                                                                ]
+
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "type",
+                                                            "display_name",
+                                                            "data"
+                                                        ]
                                                     }
-                                                }
-
-                                                }
-                                            },
-
-                                            },
-                                            {
-                                            "type": "object",
-                                            "properties": {
-                                                "type": {
-                                                "type": "string",
-                                                "enum": ["text"],
-                                                },
-                                                "display_name": {
-                                                "type": "string"
-                                                },
-                                                "data": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "data": {
-                                                    "type": "string"
-                                                    }
-                                                },
-
-                                                }
-                                            },
 
                                             }
+                                        },
+                                        "required": [
+                                            "type",
+                                            "display_name",
+                                            "data"
                                         ]
-
-                                        }
-                                    },
-                                    "required": [
-                                        "type",
-                                        "display_name",
-                                        "data"
-                                    ]
                                     }
 
-                                }
-                            },
-                            "required": [
-                                "type",
-                                "display_name",
-                                "data"
-                            ]
                             }
-
-                        }
-                    },
-                    "required": [
-                        "type",
-                        "display_name",
-                        "data"
-                    ]
+                        },
+                        "required": [
+                            "type",
+                            "display_name",
+                            "data"
+                        ]
                     }
-
-                }
             }
-        }
+        },
+        "required": [
+            "org",
+            "course_structure"
+        ]
+    }
+
     try:
         log.info(f"########################### {all_data}")
         log.info(f"########################### {type(all_data)}")
