@@ -1,0 +1,7 @@
+{
+  "course_time_spend_data":[
+    {"course_id": "python", "total_time": 600},
+    {"course_id": "python1", "total_time": 700},
+    {"course_id": "python3", "total_time": 500}
+  ]
+}
