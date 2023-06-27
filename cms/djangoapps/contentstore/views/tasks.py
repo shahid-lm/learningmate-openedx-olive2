@@ -103,6 +103,6 @@ def create_course_components(user_id : int, course_key_string : str, structure_m
                                                         update_xblock(metadata, component_block, user)
                                                     except Exception as e:
                                                         LOGGER.exception(f"Failed updating metadata for [{component['display_name']} {component['type']}] - {str(e)}")
-        LOGGER.exception(f'Successfully created course structure - {str(e)}')
+        LOGGER.exception('Successfully created course structure')
     except Exception as e:
         LOGGER.exception(f'Task failed in create_course_components - {str(e)}')
