@@ -36,7 +36,7 @@ def add_xblock_to_course(display_name : str, category : str, parent_locator : st
               display_name=_(f'{display_name}') #Mysection
       )
     created_block_locator = str(created_block.location)
-    if category not in ["chapter","sequential","vertical"]:
+    if category not in ["chapter","sequential","vertical","problem"]:
       return created_block
     return created_block_locator
   except Exception as e:
