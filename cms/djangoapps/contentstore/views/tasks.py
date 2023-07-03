@@ -54,14 +54,13 @@ outline_params_mappings = {
     "text" : "html",
     "video" : "video",
     "sga" : "edx_sga",
-    "problem" : "problem"
+    "mcq" : "problem"
 }
         
 @shared_task
 def create_course_components(user_id : int, course_key_string : str, structure_metadata : List[Dict]):
     try:
         LOGGER.info('######### Attempting to create course components #############')
-        LOGGER.info(f'############ structure_metadata - {structure_metadata}')
         user = User.objects.get(id=user_id)
         course_key = CourseKey.from_string(course_key_string)
         for data in structure_metadata:
@@ -95,9 +94,7 @@ def create_course_components(user_id : int, course_key_string : str, structure_m
                                                 except Exception as e:
                                                     LOGGER.exception(f"Failed creating component for [{component['display_name']} {component['type']}] - {str(e)}")
                                                 if component_block is not None:
-                                                    LOGGER.info(f"######### Component - {component} | type - {type(component)}")
                                                     LOGGER.info(f"######### component['data'] - {component['data']} type - {type(component['data'])}")
-                                                    LOGGER.info(f"######### component['data']['data'] - {component['data']['data']} type - {type(component['data']['data'])}")
                                                     metadata = component["data"]
                                                     metadata.update({"id" : course_key})
                                                     try:
