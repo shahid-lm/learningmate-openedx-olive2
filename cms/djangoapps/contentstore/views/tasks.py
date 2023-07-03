@@ -57,7 +57,8 @@ outline_params_mappings = {
     "discussion" : "discussion",
     "text" : "html",
     "video" : "video",
-    "sga" : "edx_sga"
+    "sga" : "edx_sga",
+    "problem" : "problem"
 }
         
 @shared_task
