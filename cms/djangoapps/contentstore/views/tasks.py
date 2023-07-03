@@ -61,6 +61,7 @@ outline_params_mappings = {
 def create_course_components(user_id : int, course_key_string : str, structure_metadata : List[Dict]):
     try:
         LOGGER.info('######### Attempting to create course components #############')
+        LOGGER.info(f'############ structure_metadata - {structure_metadata}')
         user = User.objects.get(id=user_id)
         course_key = CourseKey.from_string(course_key_string)
         for data in structure_metadata:
