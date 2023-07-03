@@ -44,11 +44,7 @@ def add_xblock_to_course(display_name : str, category : str, parent_locator : st
     return None
 
 def update_xblock(metadata : dict, parent_block : object, user : object) -> None:
-  try:
     CourseMetadata.update_from_dict(metadata, parent_block, user)
-    LOGGER.info("Successfully updated metadata")
-  except Exception as e:
-    LOGGER.exception(f"Got execption at [update_xblock] - {str(e)}")
 
 outline_params_mappings = {
     "section" : "chapter",
@@ -98,12 +94,16 @@ def create_course_components(user_id : int, course_key_string : str, structure_m
                                                 except Exception as e:
                                                     LOGGER.exception(f"Failed creating component for [{component['display_name']} {component['type']}] - {str(e)}")
                                                 if component_block is not None:
+                                                    LOGGER.info(f"######### Component - {component} | type - {type(component)}")
+                                                    LOGGER.info(f"######### component['data'] - {component['data']} type - {type(component['data'])}")
+                                                    LOGGER.info(f"######### component['data']['data'] - {component['data']['data']} type - {type(component['data']['data'])}")
                                                     metadata = component["data"]
                                                     metadata.update({"id" : course_key})
                                                     try:
                                                         update_xblock(metadata, component_block, user)
+                                                        LOGGER.info(f"Successfully updated {outline_params_mappings.get(component['type'])} component with provided metedata")
                                                     except Exception as e:
                                                         LOGGER.exception(f"Failed updating metadata for [{component['display_name']} {component['type']}] - {str(e)}")
-        LOGGER.exception('Successfully created course structure')
+        LOGGER.info('Successfully created course structure')
     except Exception as e:
         LOGGER.exception(f'Task failed in create_course_components - {str(e)}')
