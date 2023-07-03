@@ -152,8 +152,8 @@ def structure_from_mongo(structure, course_context=None):
         course_context (CourseKey): For metrics gathering, the CourseKey
             for the course that this data is being processed for.
     """
-    log.info('################ structure_from_mongo called ####################')
-    log.info(f'structure - {structure}\n course_context - {course_context}')
+    # log.info('################ structure_from_mongo called ####################')
+    # log.info(f'structure - {structure}\n course_context - {course_context}')
     
     with TIMER.timer('structure_from_mongo', course_context) as tagger:
         tagger.measure('blocks', len(structure['blocks']))
@@ -177,8 +177,8 @@ def structure_to_mongo(structure, course_context=None):
     Doesn't convert 'root', since namedtuple's can be inserted
         directly into mongo.
     """
-    log.info('################ structure_to_mongo called ####################')
-    log.info(f'structure - {structure}\n course_context - {course_context}')
+    # log.info('################ structure_to_mongo called ####################')
+    # log.info(f'structure - {structure}\n course_context - {course_context}')
     
     with TIMER.timer('structure_to_mongo', course_context) as tagger:
         tagger.measure('blocks', len(structure['blocks']))
