@@ -7174,7 +7174,39 @@ paths:
         in: path
         required: true
         type: string
+  /create_course_cms/:
+    post:
+      operationId: courses_create_rest_api
+      description: Course create rest api endpoint
+      parameters:
+      responses:
+        '201':
+          description: 'Create a new course REST API'
+          schema:
+            $ref: '#/definitions/CreateCourseRestAPI'
+      tags:
+        - create_course_restapi
 definitions:
+  CreateCourseRestAPI:
+    required:
+      - org
+      - number
+      - display_name
+      - run
+    type: object
+    properties:
+      org:
+        title: Organization Name
+        type: string
+      number:
+        title: Course Number
+        type: string
+      display_name:
+        title: Course Name
+        type: string
+      run:
+        title: Course Run
+        type: string
   BadgeClass:
     required:
       - slug

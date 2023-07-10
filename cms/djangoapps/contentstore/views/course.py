@@ -1932,12 +1932,12 @@ def _get_course_creator_status(user):
                          ))
 def create_course_cms(request):
     """
-        Method 'POST' (Create a new course API):
+        Method 'POST' (Create a new course REST API):
             Payload Example : {
-                        "org": "LM",
-                        "number": "CS150",
-                        "display_name": "APITest1",
-                        "run": "2023_V1"
+                        "org": "ORG NAME",
+                        "number": "COURSE NUMBER - CS150",
+                        "display_name": "COURSE NAME",
+                        "run": "COURSE RUN - 2023_V1"
                     }
     """
     try:
